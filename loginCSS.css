@@ -1,12 +1,11 @@
 body{
     text-align: center;
     font-family: "Madimi One", sans-serif;
-    background-image: url("joel-holland-TRhGEGdw-YY-unsplash.jpg");
-    background-size: cover;
+    background-color: #EEEEEE;
 }
 .main{
     display: inline-block;
-    border: 1px solid;
+    border: 1px solid #EEEEEE;
     padding: 25px;
     margin-top: 115px;
     border-radius: 10px;

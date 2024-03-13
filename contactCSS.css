@@ -4,9 +4,9 @@ body{
     background-image: url("dog_and_cat_pattern-11.jpg");
     background-repeat: repeat;
     background-size: contain;
-    font-family: "Madimi One", sans-serif;
-    background-attachment: fixed;
+    font-family: "Madimi One, sans-serif";
 }
-.card-img-top{
-    height: 19rem;
+.bann1{
+    background: rgb(138,138,135);
+    background: radial-gradient(circle, rgba(138,138,135,1) 0%, rgba(86,86,86,1) 100%);
 }

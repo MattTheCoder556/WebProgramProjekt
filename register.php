@@ -10,7 +10,7 @@
 </head>
 <body>
 <nav class = "backHome">
-    <a href="index.html">Back to the Home Page</a>
+    <a href="index.php">Back to the Home Page</a>
 </nav>
 <div class = "main">
     <h1>Register</h1>
@@ -42,3 +42,5 @@
 </div>
 </body>
 </html>
+
+<?php

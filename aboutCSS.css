@@ -1,0 +1,29 @@
+body{
+    overflow-x: hidden;
+    text-align: center;
+    background-image: url("dog_and_cat_pattern-11.jpg");
+    background-repeat: repeat;
+    background-size: contain;
+    font-family: "Madimi One", sans-serif;
+}
+.head {
+    text-align: center;
+    margin: 5px 0px 5px 0px;
+    background: rgb(119,249,139);
+    background: radial-gradient(circle, rgba(119,249,139,1) 0%, rgba(29,227,16,1) 100%);
+    padding: 10px;
+}
+.h1{
+    font-size: 50px;
+}
+.head2{
+    text-align: center;
+    margin: 5px 0px 5px 0px;
+    background: rgb(238,249,119);
+    background: radial-gradient(circle, rgba(238,249,119,1) 0%, rgba(227,142,16,1) 100%);
+    padding: 10px;
+}
+.p1, .p2{
+    font-size: 20px;
+}
+

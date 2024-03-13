@@ -5,8 +5,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
     />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,16 +24,16 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="index.html">Home</a>
+                    <a class="nav-link" href="index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="dogs.html">Our Dogs</a>
+                    <a class="nav-link" href="dogs.php">Our Dogs</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="about.html">About Us</a>
+                    <a class="nav-link" href="about.php">About Us</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="contact.html">Contact</a>
+                    <a class="nav-link" href="contact.php">Contact</a>
                 </li>
             </ul>
         </div>
@@ -41,9 +41,9 @@
 </nav>
 <div class = bod1>
     <h2>Welcome to Zoomies<sup>TM</sup></h2><p class = "p1">Where you can search for people who will enable your pet to
-    live out their zzzzzzooming needs.</p>
+        live out their zzzzzzooming needs.</p>
     <p class = "p1">If you want to help these people make their best friends happy, you can also sign up to be a
-    dog walker! </p>
+        dog walker! </p>
     <div class = "row dogimg">
         <div class="col-1"></div>
         <img src="matt-nelson-aI3EBLvcyu4-unsplash.jpg" class = "col-5 dg">
@@ -175,7 +175,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Register</h5>
                     <p class="card-text">If you want to hire or be hired, you need to make an account, which you can do here easily!</p>
-                    <a href="register.html" class="card-link">Register</a>
+                    <a href="register.php" class="card-link">Register</a>
                 </div>
             </div>
         </div>
@@ -184,7 +184,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Login</h5>
                     <p class="card-text">Already have an account? Log in right here, and continue your lovely service!</p>
-                    <a href="login.html" class="card-link">Login</a>
+                    <a href="login.php" class="card-link">Login</a>
                 </div>
             </div>
         </div>
@@ -194,3 +194,6 @@
 </div>
 </body>
 </html>
+
+<?php
+
