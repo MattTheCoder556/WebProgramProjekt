@@ -11,16 +11,29 @@
     <title>Our Dogs</title>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<?php
+require("db_config.php");
+
+
+$sql_str = "";
+
+if (isset($sql_str)) {
+    $sql = "SELECT dog_name, dog_pic, dog_breed, dog_age, dog_bday, dog_gender FROM dogs " . $sql_str;
+    if ($result = $connection -> query($sql)) {
+        while ($row = $result -> fetch_assoc()) {
+            $dogs[] = $row;
+        }
+    }
+}
+
+?>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Zoomies</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php">Home</a>
+        <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="index.php">Homepage</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="dogs.php">Our Dogs</a>
@@ -33,93 +46,48 @@
                 </li>
             </ul>
         </div>
+        <div class="mx-auto order-0">
+            <a class="navbar-brand mx-auto">Zoomies</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".dual-collapse2">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="login.php">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="register.php">Register</a>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
 </body>
-<div class = "row">
-    <div class = "col-lg-3 col-sm-6">
-        <div class="card">
-            <img src="dog1.jpg" class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Gooboy</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+<div class = "cards">
+    <div class = "row">
+        <?php
+        if (!empty($dogs)) {
+            foreach ($dogs as $key => $value) {
+                echo '
+        <div class = "col-lg-3 col-sm-6">
+            <div class="card">
+                <img src="'.$value['dog_pic'].'" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title">'.$value['dog_name'].'</h5>
+                    <p class="card-text">'.$value['dog_breed'].'<br>'.$value['dog_age'].'<br>'.$value['dog_bday'].'<br>'.$value['dog_gender'].'</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class = "col-lg-3 col-sm-6">
-        <div class="card">
-            <img src="dog2.jpg" class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Perito</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
-    </div>
-    <div class = "col-lg-3 col-sm-6">
-        <div class="card">
-            <img src="dog3.jpg" class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">🗿</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
-    </div>
-    <div class = "col-lg-3 col-sm-6">
-        <div class="card">
-            <img src="dog4.jpg" class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Lil baby</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
-    </div>
-</div>
-<br>
-<div class = "row">
-    <div class = "col-lg-3 col-sm-6">
-        <div class="card">
-            <img src="dog5.jpg" class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Cutester</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
-    </div>
-    <div class = "col-lg-3 col-sm-6">
-        <div class="card">
-            <img src="dog6.jpg" class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Cutester again</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
-    </div>
-    <div class = "col-lg-3 col-sm-6">
-        <div class="card">
-            <img src="dog7.jpg" class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Rug</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
-    </div>
-    <div class = "col-lg-3 col-sm-6">
-        <div class="card">
-            <img src="dog8.jpg" class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">I swear its not a PNG</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
+        </div>';
+            }
+        }
+        else {
+            echo '<p class="dogerror"> Looks like the dogs have gone to sleep :( </p>';
+        }
+        ?>
     </div>
 </div>
 </html>
-<?php
+

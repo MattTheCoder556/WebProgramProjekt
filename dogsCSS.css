@@ -10,3 +10,9 @@ body{
 .card-img-top{
     height: 19rem;
 }
+.cards{
+    margin: 5px;
+    background: rgba(20, 44, 38, 80%);
+    padding: 15px;
+    border-radius: 10px;
+}

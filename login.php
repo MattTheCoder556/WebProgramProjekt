@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +17,7 @@
 <div class = "main">
     <h1>Login</h1>
     <br><br>
-    <form action="" method = "post" id = "form1">
+    <form action="index.php" method = "post" id = "form1">
         <label for="email">E-Mail: </label>
         <input type="text" id="email" name="email">
         <br><br><br>
@@ -23,9 +25,21 @@
         <input type="password" id="passw" name="passw">
     </form>
     <br><br>
-    <button type="submit" form="form1" value="Login">Login</button>
+    <button type="submit" name = "logButt" form="form1" value="Login">Login</button>
 </div>
+<?php
+$valueUname = $_POST['email'];
+$valuePassw = $_POST['passw'];
+
+if($valueUname == 'admin' || $valuePassw == 'admin')
+{
+    if(isset($_POST['logButt'])){
+        header("Location: admin.php");
+        exit;
+    }
+}
+?>
 </body>
 </html>
 
-<?php
+

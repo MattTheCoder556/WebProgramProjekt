@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,16 +16,12 @@
     <title>Dogwalking</title>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Zoomies</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php">Home</a>
+        <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="index.php">Homepage</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="dogs.php">Our Dogs</a>
@@ -37,6 +34,22 @@
                 </li>
             </ul>
         </div>
+        <div class="mx-auto order-0">
+            <a class="navbar-brand mx-auto">Zoomies</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".dual-collapse2">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="login.php">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="register.php">Register</a>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
 <div class = bod1>
@@ -46,17 +59,36 @@
         dog walker! </p>
     <div class = "row dogimg">
         <div class="col-1"></div>
-        <img src="matt-nelson-aI3EBLvcyu4-unsplash.jpg" class = "col-5 dg">
-        <img src="camilo-fierro-z7rcwqCi77s-unsplash.jpg" class = "col-5 dg">
+        <img src="matt-nelson-aI3EBLvcyu4-unsplash.jpg" class = "col-lg-5 col-md-12 dg">
+        <img src="camilo-fierro-z7rcwqCi77s-unsplash.jpg" class = "col-lg-5 col-md-12 dg">
         <div class="col-1"></div>
     </div>
 </div>
 <div class="active">
     <p class ="pr">Our top 5 Most Active Dog Walkers</p>
     <div class = "row">
-        <div class = col-1>
+        <div class = col-lg-1>
         </div>
-        <div class = col-2>
+        <div class = "col-lg-2 col-md-4">
+            <div class="card">
+                <img class="card-img-top" src="..." alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title"></p></h5>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class = "col-lg-2 col-md-4">
+            <div class="card">
+                <img class="card-img-top" src="..." alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title"></h5>
+                    <p class="card-text"></p>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class = "col-lg-2 col-md-4">
             <div class="card">
                 <img class="card-img-top" src="..." alt="Card image cap">
                 <div class="card-body">
@@ -66,7 +98,7 @@
             </div>
         </div>
         <br>
-        <div class = col-2>
+        <div class = "col-lg-2 col-md-4">
             <div class="card">
                 <img class="card-img-top" src="..." alt="Card image cap">
                 <div class="card-body">
@@ -76,7 +108,7 @@
             </div>
         </div>
         <br>
-        <div class = col-2>
+        <div class = "col-lg-2 col-md-4">
             <div class="card">
                 <img class="card-img-top" src="..." alt="Card image cap">
                 <div class="card-body">
@@ -85,35 +117,34 @@
                 </div>
             </div>
         </div>
-        <br>
-        <div class = col-2>
-            <div class="card">
-                <img class="card-img-top" src="..." alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-            </div>
-        </div>
-        <br>
-        <div class = col-2>
-            <div class="card">
-                <img class="card-img-top" src="..." alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-            </div>
-        </div>
-        <div class = col-1>
+        <div class = col-lg-1>
         </div>
     </div>
     <br><br>
     <p class="pr">Our 5 Top Rated Dog Walker</p>
     <div class = "row">
-        <div class = col-1>
+        <div class = col-lg-1>
         </div>
-        <div class = col-2>
+        <div class = "col-lg-2 col-md-4">
+            <div class="card">
+                <img class="card-img-top" src="..." alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title"></p></h5>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class = "col-lg-2 col-md-4">
+            <div class="card">
+                <img class="card-img-top" src="..." alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title"></h5>
+                    <p class="card-text"></p>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class = "col-lg-2 col-md-4">
             <div class="card">
                 <img class="card-img-top" src="..." alt="Card image cap">
                 <div class="card-body">
@@ -123,7 +154,7 @@
             </div>
         </div>
         <br>
-        <div class = col-2>
+        <div class = "col-lg-2 col-md-4">
             <div class="card">
                 <img class="card-img-top" src="..." alt="Card image cap">
                 <div class="card-body">
@@ -133,7 +164,7 @@
             </div>
         </div>
         <br>
-        <div class = col-2>
+        <div class = "col-lg-2 col-md-4">
             <div class="card">
                 <img class="card-img-top" src="..." alt="Card image cap">
                 <div class="card-body">
@@ -142,58 +173,10 @@
                 </div>
             </div>
         </div>
-        <br>
-        <div class = col-2>
-            <div class="card">
-                <img class="card-img-top" src="..." alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-            </div>
-        </div>
-        <br>
-        <div class = col-2>
-            <div class="card">
-                <img class="card-img-top" src="..." alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-            </div>
-        </div>
-        <div class = col-1>
+        <div class = col-lg-1>
         </div>
     </div>
-</div>
-<div class = "bod2">
-    <div class = "row">
-        <div class = col-2>
-        </div>
-        <div class = col-4>
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Register</h5>
-                    <p class="card-text">If you want to hire or be hired, you need to make an account, which you can do here easily!</p>
-                    <a href="register.php" class="card-link">Register</a>
-                </div>
-            </div>
-        </div>
-        <div class = "col-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Login</h5>
-                    <p class="card-text">Already have an account? Log in right here, and continue your lovely service!</p>
-                    <a href="login.php" class="card-link">Login</a>
-                </div>
-            </div>
-        </div>
-        <div class = col-2>
-        </div>
-    </div>
-</div>
+    <a href = "admin.php">To admin</a>
 </body>
 </html>
-
-<?php
 

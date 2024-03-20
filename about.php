@@ -14,16 +14,12 @@
     <title>About Us</title>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Zoomies</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php">Home</a>
+        <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="index.php">Homepage</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="dogs.php">Our Dogs</a>
@@ -33,6 +29,22 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="contact.php">Contact</a>
+                </li>
+            </ul>
+        </div>
+        <div class="mx-auto order-0">
+            <a class="navbar-brand mx-auto">Zoomies</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".dual-collapse2">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="login.php">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="register.php">Register</a>
                 </li>
             </ul>
         </div>
@@ -47,16 +59,20 @@
         their zooming needs. <br>We even plan to collaborate with shelters, so even they get the love they all need and
         deserve.</p>
 </div>
+<div class = "row dogimg">
+    <img src="krakenimages-376KN_ISplE-unsplash.jpg" class = "col-6 dg">
+    <img src="eric-ward-ISg37AI2A-s-unsplash.jpg" class = "col-6 dg">
+</div>
 <div class=head2>
     <h1 class="h1">Beginnings</h1>
     <br>
     <p class="p2">The idea came form seeing a lot of friends and family struggling to break some time to spend time with
         their pets, and the pets getting a liiitle bit overweight.<br>
         Asking on the internet if someone is available(e.g. Facebook, Instagram, etc.) can be a little tedious, so I
-        came up with an idea that is easy to do and practical for everyday use.
-        <br>A webiste!<br>
-        On here, everyone can either put up their dog, so people can see their pets lovely attributes(name, age, breed,
-        etc.), and if you want to get out and move yourself, you can even register as a Dog Walker! </p>
+        came up with an idea that is easy to do and practical for everyday use.</p>
+    <br><div class = "web">A <div class = "w">w</div><div class = "e">e</div><div class = "b">b</div><div class = "s">s</div><div class = "i">i</div><div class = "t">t</div><div class = "e">e</div><div class = "ex">!</div></div><br>
+    <p class = "p2">On here, everyone can either put up their dog, so people can see their pets lovely attributes(name, age, breed,
+        etc.), and if you want to get out and move yourself, you can even register as a Dog Walker!</p>
 </div>
 </body>
 </html>
