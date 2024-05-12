@@ -23,22 +23,30 @@
         <br><br><br>
         <label for="passw">Password: </label>
         <input type="password" id="passw" name="passw">
-    </form>
-    <br><br>
-    <button type="submit" name = "logButt" form="form1" value="Login">Login</button>
-</div>
-<?php
-$valueUname = $_POST['email'];
-$valuePassw = $_POST['passw'];
+        <br><br>
+        <button type="submit" name = "logButt" form="form1" value="Login">Login</button>
+        <?php
+        require_once 'db_config.php';
 
-if($valueUname == 'admin' || $valuePassw == 'admin')
-{
-    if(isset($_POST['logButt'])){
-        header("Location: admin.php");
-        exit;
-    }
-}
-?>
+        $l = 0;
+
+        if (isset($_GET["l"]) and is_numeric($_GET['l'])) {
+            $l = (int)$_GET["l"];
+
+            if (array_key_exists($l, $messages)) {
+                echo '
+                    <div class="alert alert-info alert-dismissible fade show m-3" role="alert">
+                        ' . $messages[$l] . '
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                        </button>
+                    </div>
+                    ';
+            }
+        }
+        ?>
+    </form>
+
+</div>
 </body>
 </html>
 

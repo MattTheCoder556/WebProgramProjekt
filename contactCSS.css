@@ -1,31 +1,44 @@
 body{
     overflow-x: hidden;
     text-align: center;
-    background-image: url("dog_and_cat_pattern-11.jpg");
+    background-image: url("Images/dog_and_cat_pattern-11.jpg");
     background-repeat: repeat;
     background-size: contain;
     font-family: "Madimi One", "sans-serif";
 }
 
 .bann1{
-    margin-top: 5px;
     padding:10px;
     background: rgb(138,138,135);
     background: radial-gradient(circle, rgba(138,138,135,1) 0%, rgba(86,86,86,1) 100%);
 }
 
 .bann2{
-
+    background: rgb(102,235,236);
+    background: radial-gradient(circle, rgba(102,235,236,1) 6%, rgba(71,112,250,1) 100%);
+    padding-bottom: 50px;
+    font-size: 25px;
 }
 
 .form{
-    background-color: moccasin;
+    position: absolute;
+    right: 461px;
     height: 46px;
     width: 600px;
     padding: 0 10px;
     border-radius: 10px;
     color: black;
-    text-align: center;
+}
+
+.form2{
+    position: absolute;
+    bottom: 408px;
+}
+
+.textbox{
+    background: rgb(102,235,236);
+    background: radial-gradient(circle, rgba(102,235,236,1) 6%, rgba(71,112,250,1) 100%);
+    font-size: 20px;
 }
 
 .form:not(:checked) > input {
@@ -33,7 +46,6 @@ body{
     top:-9999px;
 }
 .form:not(:checked) > label {
-    float:right;
     width:1em;
     overflow:hidden;
     white-space:nowrap;

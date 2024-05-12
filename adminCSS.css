@@ -1,5 +1,5 @@
 body{
-    background: palegreen;
+
 }
 
 .admin__table {
@@ -12,7 +12,7 @@ body{
 }
 
 .admin__table td {
-    padding: 10px 0;
+    padding: 5px 0;
 }
 
 .admin__table tr {
@@ -21,35 +21,29 @@ body{
 
 .admin__table-new {
     margin-top: 40px;
-    background-color: #29abe2;
     padding: 10px 25px;
     font-family: "Roboto";
     font-weight: 300;
     border-radius: 5px;
-    border: 1px solid #29abe2;
+    border: 1px solid;
     font-size: 18px;
-    cursor: pointer;
-    transition: background-color .4s ease;
 }
 
 .admin__table-new:hover {
-    background-color: #0d94ce
+    background-color: #909090;
 }
 
 .admin__table-button {
-    background-color: #29abe2;
     padding: 5px 15px;
     font-family: "Roboto";
     font-weight: 300;
     border-radius: 5px;
-    border: 1px solid #29abe2;
+    border: 1px solid;
     font-size: 18px;
-    cursor: pointer;
-    transition: background-color .4s ease;
 }
 
 .admin__table-button:hover {
-    background-color: #0d94ce
+    background-color: #909090;
 }
 
 .update__item {
@@ -62,4 +56,9 @@ body{
     border-radius: 5px;
     width: 50%;
     font-family: "Roboto";
+}
+
+td{
+    text-align: center;
+    border: 1px solid;
 }

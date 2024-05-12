@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,12 +15,35 @@
     <title>Dogwalking</title>
 </head>
 <body>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+<?php
+require("db_config.php");
+require 'functions.php';
+
+try {
+    $sql_str = "";
+
+    if (isset($sql_str)) {
+        $sql = "SELECT u_fname, u_lname, u_email, u_phone, active FROM users WHERE walk_switch = 1" . $sql_str;
+        $stmt = $pdo->query($sql);
+        $u = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+} catch(PDOException $e) {
+    echo "Connection failed: " . $e->getMessage();
+}
+?>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+        <a class="navbar-brand" href="#">Zoomies</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item active">
                     <a class="nav-link" href="index.php">Homepage</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="walkers.php">Our Walkers</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="dogs.php">Our Dogs</a>
@@ -33,15 +55,10 @@
                     <a class="nav-link" href="contact.php">Contact</a>
                 </li>
             </ul>
-        </div>
-        <div class="mx-auto order-0">
-            <a class="navbar-brand mx-auto">Zoomies</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".dual-collapse2">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>
-        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
-            <ul class="navbar-nav ms-auto">
+            <?php
+            if(!isset($u['active'])) {
+                echo '
+                <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="login.php">Login</a>
                 </li>
@@ -49,6 +66,18 @@
                     <a class="nav-link" href="register.php">Register</a>
                 </li>
             </ul>
+                ';
+            }
+            else{
+                echo'
+                <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="user.php"><i class="bi bi-person-fill"></i></a>
+                </li>
+                ';
+            }
+            ?>
+
         </div>
     </div>
 </nav>
@@ -59,124 +88,72 @@
         dog walker! </p>
     <div class = "row dogimg">
         <div class="col-1"></div>
-        <img src="matt-nelson-aI3EBLvcyu4-unsplash.jpg" class = "col-lg-5 col-md-12 dg">
-        <img src="camilo-fierro-z7rcwqCi77s-unsplash.jpg" class = "col-lg-5 col-md-12 dg">
+        <img src="Images/matt-nelson-aI3EBLvcyu4-unsplash.jpg" class = "col-lg-5 col-md-12 dg">
+        <img src="Images/camilo-fierro-z7rcwqCi77s-unsplash.jpg" class = "col-lg-5 col-md-12 dg">
         <div class="col-1"></div>
     </div>
 </div>
 <div class="active">
     <p class ="pr">Our top 5 Most Active Dog Walkers</p>
     <div class = "row">
-        <div class = col-lg-1>
-        </div>
-        <div class = "col-lg-2 col-md-4">
-            <div class="card">
-                <img class="card-img-top" src="..." alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title"></p></h5>
-                </div>
-            </div>
-        </div>
-        <br>
-        <div class = "col-lg-2 col-md-4">
-            <div class="card">
-                <img class="card-img-top" src="..." alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title"></h5>
-                    <p class="card-text"></p>
-                </div>
-            </div>
-        </div>
-        <br>
-        <div class = "col-lg-2 col-md-4">
-            <div class="card">
-                <img class="card-img-top" src="..." alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-            </div>
-        </div>
-        <br>
-        <div class = "col-lg-2 col-md-4">
-            <div class="card">
-                <img class="card-img-top" src="..." alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-            </div>
-        </div>
-        <br>
-        <div class = "col-lg-2 col-md-4">
-            <div class="card">
-                <img class="card-img-top" src="..." alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-            </div>
-        </div>
-        <div class = col-lg-1>
-        </div>
-    </div>
-    <br><br>
+        <div class = col-lg-1></div>
+        <?php
+        if (!empty($u)) {
+            foreach ($u as $key => $value) {
+                $c = 1;
+                $c++;
+                if($c > 5){
+                    break;
+                }
+                echo'   
+           
+       <div class = "col-lg-2 col-md-4">
+           <div class="card">
+               <div class="card-body">
+                   <h5 class="card-title">"'. $value['u_fname'] ." ". $value['u_lname'] .'"</h5>
+                   <p class="card-text">Activity</p>
+               </div>
+           </div>
+       </div>';
+            }
+            }
+            else
+            {
+                echo '<p class="dogerror">No users posted right now</p>';
+            }
+            ?>
+    <br><br><br>
     <p class="pr">Our 5 Top Rated Dog Walker</p>
     <div class = "row">
         <div class = col-lg-1>
         </div>
-        <div class = "col-lg-2 col-md-4">
-            <div class="card">
-                <img class="card-img-top" src="..." alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title"></p></h5>
-                </div>
-            </div>
-        </div>
-        <br>
-        <div class = "col-lg-2 col-md-4">
-            <div class="card">
-                <img class="card-img-top" src="..." alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title"></h5>
-                    <p class="card-text"></p>
-                </div>
-            </div>
-        </div>
-        <br>
-        <div class = "col-lg-2 col-md-4">
-            <div class="card">
-                <img class="card-img-top" src="..." alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-            </div>
-        </div>
-        <br>
-        <div class = "col-lg-2 col-md-4">
-            <div class="card">
-                <img class="card-img-top" src="..." alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-            </div>
-        </div>
-        <br>
-        <div class = "col-lg-2 col-md-4">
-            <div class="card">
-                <img class="card-img-top" src="..." alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-            </div>
-        </div>
-        <div class = col-lg-1>
-        </div>
+        <?php
+        if (!empty($u)) {
+            foreach ($u as $key => $value) {
+                $c = 1;
+                $c++;
+                if($c > 5){
+                    break;
+                }
+                echo'   
+           
+       <div class = "col-lg-2 col-md-4">
+           <div class="card">
+               <div class="card-body">
+                   <h5 class="card-title">"'. $value['u_fname'] ." ". $value['u_lname'] .'"</h5>
+                   <p class="card-text">Rating</p>
+               </div>
+           </div>
+       </div>';
+            }
+        }
+        else
+        {
+            echo '<p class="dogerror">No users posted right now</p>';
+        }
+        ?>
     </div>
-    <a href = "admin.php">To admin</a>
+    <a href = "adminUsers.php">To admin</a>
 </body>
 </html>
 

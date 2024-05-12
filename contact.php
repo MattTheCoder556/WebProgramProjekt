@@ -11,12 +11,36 @@
     <title>Contact</title>
 </head>
 <body>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+<?php
+require("db_config.php");
+require 'functions.php';
+
+try {
+    $sql_str = "";
+
+    if (isset($sql_str)) {
+        $sql = "SELECT u_fname, u_lname, u_phone, u_email, walk_switch FROM users WHERE walk_switch != NULL" . $sql_str;
+        $stmt = $pdo->query($sql);
+
+        $u = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+} catch(PDOException $e) {
+    echo "Connection failed: " . $e->getMessage();
+}
+?>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+        <a class="navbar-brand" href="#">Zoomies</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item active">
                     <a class="nav-link" href="index.php">Homepage</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="walkers.php">Our Walkers</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="dogs.php">Our Dogs</a>
@@ -28,15 +52,10 @@
                     <a class="nav-link" href="contact.php">Contact</a>
                 </li>
             </ul>
-        </div>
-        <div class="mx-auto order-0">
-            <a class="navbar-brand mx-auto">Zoomies</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".dual-collapse2">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>
-        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
-            <ul class="navbar-nav ms-auto">
+            <?php
+            if(!isset($u['registration_token'])) {
+                echo '
+                <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="login.php">Login</a>
                 </li>
@@ -44,6 +63,17 @@
                     <a class="nav-link" href="register.php">Register</a>
                 </li>
             </ul>
+                ';
+            }
+            else{
+                echo'
+                <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="user.php"><i class="bi bi-person-fill"></i></a>
+                </li>
+                ';
+            }
+            ?>
         </div>
     </div>
 </nav>
@@ -53,7 +83,9 @@
     <h3 class = "email">examplemail@dogwalking.com</h3>
 </div>
 <div class = "bann2">
+<p>Want to express your feelings a bit simpler? Rate Us! We'll take note of all of them.</p>
     <div class = "form">
+        5&nbsp;
         <input type="radio" id="star5" name="rate" value="5" />
         <label for="star5" title="text">5 stars</label>
         <input type="radio" id="star4" name="rate" value="4" />
@@ -64,7 +96,13 @@
         <label for="star2" title="text">2 stars</label>
         <input type="radio" id="star1" name="rate" value="1" />
         <label for="star1" title="text">1 star</label>
+        &nbsp;1
     </div>
+</div>
+<div class = "textbox">
+    <label for="text">Leave a review!</label>
+    <br>
+    <textarea name="text" id="text" rows="5" cols="41"></textarea>
 </div>
 </body>
 </html>

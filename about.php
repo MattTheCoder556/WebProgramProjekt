@@ -14,12 +14,36 @@
     <title>About Us</title>
 </head>
 <body>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+<?php
+require("db_config.php");
+require("functions.php");
+
+try {
+    $sql_str = "";
+
+    if (isset($sql_str)) {
+        $sql = "SELECT u_fname, u_lname, u_phone, u_email, walk_switch FROM users WHERE walk_switch != NULL" . $sql_str;
+        $stmt = $pdo->query($sql);
+
+        $u = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+} catch(PDOException $e) {
+    echo "Connection failed: " . $e->getMessage();
+}
+?>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+        <a class="navbar-brand" href="#">Zoomies</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item active">
                     <a class="nav-link" href="index.php">Homepage</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="walkers.php">Our Walkers</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="dogs.php">Our Dogs</a>
@@ -31,15 +55,10 @@
                     <a class="nav-link" href="contact.php">Contact</a>
                 </li>
             </ul>
-        </div>
-        <div class="mx-auto order-0">
-            <a class="navbar-brand mx-auto">Zoomies</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".dual-collapse2">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>
-        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
-            <ul class="navbar-nav ms-auto">
+            <?php
+            if(!isset($u['registration_token'])) {
+                echo '
+                <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="login.php">Login</a>
                 </li>
@@ -47,6 +66,17 @@
                     <a class="nav-link" href="register.php">Register</a>
                 </li>
             </ul>
+                ';
+            }
+            else{
+                echo'
+                <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="user.php"><i class="bi bi-person-fill"></i></a>
+                </li>
+                ';
+            }
+            ?>
         </div>
     </div>
 </nav>
@@ -60,8 +90,8 @@
         deserve.</p>
 </div>
 <div class = "row dogimg">
-    <img src="krakenimages-376KN_ISplE-unsplash.jpg" class = "col-6 dg">
-    <img src="eric-ward-ISg37AI2A-s-unsplash.jpg" class = "col-6 dg">
+    <img src="Images/krakenimages-376KN_ISplE-unsplash.jpg" class = "col-lg-6 col-md-12 dg">
+    <img src="Images/eric-ward-ISg37AI2A-s-unsplash.jpg" class = "col-lg-6 col-md-12 dg">
 </div>
 <div class=head2>
     <h1 class="h1">Beginnings</h1>

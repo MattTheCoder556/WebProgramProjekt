@@ -1,0 +1,63 @@
+body{
+    overflow-x: hidden;
+    text-align: center;
+    background-image: url("dog_and_cat_pattern-11.jpg");
+    background-repeat: repeat;
+    background-size: contain;
+    background-attachment: fixed;
+    font-family: "Madimi One", sans-serif;
+}
+
+.h{
+    background: rgba(60, 60, 60, 0.5);
+    padding: 25px;
+    border-radius: 10px;
+    color: black;
+    font-size: 75px;
+}
+.log{
+    position: fixed;
+    right: 95px;
+}
+.reg{
+    position: fixed;
+    right: 25px;
+}
+
+.bod1{
+    text-align: center;
+    background: rgb(230,167,71);
+    background: radial-gradient(circle, rgba(230,167,71,1) 46%, rgba(190,64,9,1) 90%);
+    padding: 5px;
+}
+
+.p1{
+    font-size: 20px;
+}
+
+.bod2{
+    padding: 15px;
+    background: rgb(24,150,198);
+    background: radial-gradient(circle, rgba(24,150,198,1) 25%, rgba(2,77,157,1) 81%);
+}
+.card-link{
+    background-color: blue;
+    padding: 5px;
+    color: white;
+    border-radius: 5px;
+}
+.card{
+    color: white;
+    background: rgb(37,36,36);
+    background: radial-gradient(circle, rgba(37,36,36,1) 12%, rgba(0,0,0,1) 81%);
+}
+
+.active{
+    background: rgba(20, 44, 38, 80%);
+}
+
+.pr{
+    color: beige;
+    font-size: 25px;
+}
+
