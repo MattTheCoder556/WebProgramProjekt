@@ -30,7 +30,7 @@ if ($action != "" and in_array($action, $actions) and strpos($referer, SITE) !==
             $password = trim($_POST["passw"]);
 
             if ($username == "admin" && $password == "admin") {
-                redirection("Admins/adminUsers.php");
+                redirection("admins.php");
             }
 
             if (!empty($username) && !empty($password)) {
@@ -44,6 +44,7 @@ if ($action != "" and in_array($action, $actions) and strpos($referer, SITE) !==
                     $_SESSION['phone'] = $data['phone'];
                     $_SESSION['address'] = $data['address'];
                     $_SESSION['profPic'] = $data['profPic'];
+                    $_SESSION['dogw'] = $data['dogw'];
                     $_SESSION['username'] = $username;
                     redirection('user.php');
                 } else {
@@ -56,30 +57,6 @@ if ($action != "" and in_array($action, $actions) and strpos($referer, SITE) !==
 
 
         case "register":
-            $profPic = "";
-
-            if (isset($_FILES['u_pic']) && $_FILES['u_pic']['error'] == 0) {
-                if (is_uploaded_file($_FILES['u_pic']['tmp_name'])) {
-                    $file_name = $_FILES['u_pic']['name'];
-                    $file_temp = $_FILES['u_pic']['tmp_name'];
-                    $directory = 'ProfPic';
-                    $upload = "$directory/$file_name";
-
-                    if (!file_exists($directory)) {
-                        mkdir($directory, 0777, true);
-                    }
-
-                    if (!file_exists($upload)) {
-                        if (move_uploaded_file($file_temp, $upload)) {
-                            $profPic = $upload;
-                            error_log("Profile Picture Path: " . $profPic);
-                        } else {
-                            echo "<p><b>Error uploading file!</b></p>";
-                            exit();
-                        }
-                    }
-                }
-            }
 
            //$profPic = trim($_POST['profilePic']);
             $firstname = trim($_POST['firstname']);
@@ -106,7 +83,7 @@ if ($action != "" and in_array($action, $actions) and strpos($referer, SITE) !==
             if (!existsUser($pdo, $email)) {
                 $token = createToken(20);
                 if ($token) {
-                    $id_user = registerUser($pdo, $profPic, $password, $firstname, $lastname, $email, $address, $token, $phoneNum, $wSwitch);
+                    $id_user = registerUser($pdo, $password, $firstname, $lastname, $email, $address, $token, $phoneNum, $wSwitch);
 
                     try {
                         $body = "Your username is $email. To activate your account click on the <a href=\"" . SITE . "active.php?token=$token\">link</a>";
@@ -154,6 +131,7 @@ if ($action != "" and in_array($action, $actions) and strpos($referer, SITE) !==
 
             if (isset($_POST['dogw'])) {
                 $wSwitch = trim($_POST["dogw"]);
+                $_SESSION['dogw'] = $wSwitch;
             }
 
             if (isset($_POST['address'])) {
@@ -200,7 +178,7 @@ if ($action != "" and in_array($action, $actions) and strpos($referer, SITE) !==
             if (!existsUser($pdo, $email)) {
                 $token = createToken(20);
                 if ($token) {
-                    $id_user = registerUser($pdo, $profPic, $password, $firstname, $lastname, $email, $address, $token, $phoneNum, $wSwitch);
+                    $id_user = registerUser($pdo, $password, $firstname, $lastname, $email, $address, $token, $phoneNum, $wSwitch);
 
                     try {
                         $body = "Your username is $email. To activate your account click on the <a href=\"" . SITE . "active.php?token=$token\">link</a>";
@@ -220,11 +198,11 @@ if ($action != "" and in_array($action, $actions) and strpos($referer, SITE) !==
 
         case "forget" :
             $email = trim($_POST["email"]);
-            if (!empty($email) and getUserData($pdo, 'u_id', 'email', $email)) {
+            if (!empty($email) and getUserData($pdo, 'u_id', 'u_email', $email)) {
                 $token = createToken(20);
                 if ($token) {
                     setForgottenToken($pdo, $email, $token);
-                    $id_user = getUserData($pdo, 'u_id', 'email', $email);
+                    $id_user = getUserData($pdo, 'u_id', 'u_email', $email);
                     try {
                         $body = "To start the process of changing password, visit <a href=" . SITE . "forget.php?token=$token>link</a>.";
                         sendEmail($pdo, $email, $emailMessages['forget'], $body, $id_user);

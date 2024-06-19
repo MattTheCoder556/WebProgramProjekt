@@ -1,12 +1,13 @@
-body{
+body {
     overflow-x: hidden;
     text-align: center;
-    background-image: url("../dog_and_cat_pattern-11.jpg");
+    background-image: url("../Images/dog_and_cat_pattern-11.jpg");
     background-repeat: repeat;
     background-size: contain;
     background-attachment: fixed;
     font-family: "Madimi One", sans-serif;
 }
+
 
 .h{
     background: rgba(60, 60, 60, 0.5);

@@ -1,0 +1,157 @@
+/* Resetting default margin and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+/* Header styles */
+.main-cover {
+    background-color: #333;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.main-cover a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.main-cover a:hover {
+    text-decoration: underline;
+}
+
+/* Page wrapper styles */
+.page-wrapper {
+    width: 80%;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow-x: auto; /* Added to enable horizontal scrolling */
+}
+
+/* Block title styles */
+.block-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Table styles */
+.admin__table {
+    width: 250%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    table-layout: fixed; /* Ensures table cells have equal width */
+}
+
+.admin__table th, .admin__table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+    word-wrap: break-word; /* Allows long words to break and wrap */
+}
+
+.admin__table th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+
+.admin__table img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+}
+
+.admin__table-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.admin__table-button:hover {
+    background-color: #0056b3;
+}
+
+.admin__table-new {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.admin__table-new:hover {
+    background-color: #218838;
+}
+
+/* Form update styles */
+.admin__update {
+    width: 80%; /* Adjusted for wider forms */
+    max-width: 1200px; /* Added max-width to limit form width */
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.update__item {
+    margin-bottom: 10px;
+}
+
+.update__item input[type="text"],
+.update__item input[type="file"],
+.update__item input[type="checkbox"] {
+    width: calc(100% - 16px); /* Adjusted for padding */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.update__item input[type="checkbox"] {
+    width: auto;
+}
+
+.update__item label {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+/* Footer link styles */
+p {
+    text-align: center;
+    margin-top: 20px;
+}
+
+p a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+p a:hover {
+    text-decoration: underline;
+}

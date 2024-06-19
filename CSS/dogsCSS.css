@@ -1,0 +1,115 @@
+body{
+    overflow-x: hidden;
+    text-align: center;
+    background-image: url("../Images/dog_and_cat_pattern-11.jpg");
+    background-repeat: repeat;
+    background-size: contain;
+    font-family: "Madimi One", sans-serif;
+    background-attachment: fixed;
+}
+.card-img-top{
+    height: 19rem;
+}
+.cards{
+    margin: 5px;
+    background: rgba(20, 44, 38, 80%);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.card{
+    margin: 5px;
+}
+
+.butt_add{
+    background-color: cornflowerblue;
+    padding: 15px;
+    color: #181a1f;
+    margin: 10px;
+}
+
+.square{
+    background-color: rgba(180, 180, 180, 90%);
+    border-radius: 10px;
+}
+
+.lighterSQ{
+    background-color: rgba(190, 190, 190, 90%);
+    border-radius: 10px;
+    padding-left: 35px;
+    padding-right: 35px;
+}
+
+.uImage{
+    height: 400px;
+    width: 500px;
+    border-radius: 25px;
+    display: inline-block;
+    border: 1px solid;
+}
+
+.text{
+    width: 500px;
+    text-align: center;
+    padding-top: 35px;
+    padding-bottom: 15px;
+    background-color: rgb(190, 190, 190);
+    border-radius: 10px;
+}
+
+.img{
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.tit{
+    background-color: rgba(180, 180, 180, 80%);
+    border-radius: 5px;
+    padding-bottom: 10px;
+}
+
+.popup {
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: none;
+}
+.popup-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888888;
+    width: 30%;
+    font-weight: bolder;
+}
+.popup-content button {
+    display: block;
+    margin: 0 auto;
+}
+.show {
+    display: block;
+}
+
+.profile-pic {
+    width: 150px;  /* Adjust the width as needed */
+    height: 150px; /* Adjust the height as needed */
+    object-fit: cover; /* Ensures the image covers the given dimensions */
+    border-radius: 20%; /* Optional: makes the image circular */
+}
+
+.popup-content{
+    border: 1px solid;
+    padding: 5px;
+    border-radius: 10px;
+    text-align: center
+}
+
+.butt_border{
+    border-radius: 10px;
+}

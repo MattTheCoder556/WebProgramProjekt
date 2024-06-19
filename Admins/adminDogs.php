@@ -1,7 +1,7 @@
 <?php
-require_once 'db_config.php';
-require 'functions.php';
-
+require_once '../db_config.php';
+require '../functions.php';
+include "adminCS.php";
 function printr ($var) {
     echo '<pre>';
     print_r($var);
@@ -43,7 +43,7 @@ if (isset($_POST['operation'])) {
                 $stmt->execute($values);
             }
             else {
-                $sql = "SELECT d_id, d_pic, d_name, d_breed, d_gender, d_age, d_desc  FROM dogs WHERE d_id = ?";
+                $sql = "SELECT d_id, d_pic, d_name, d_breed, d_gender, d_age, d_desc, walk_day  FROM dogs WHERE d_id = ?";
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute([$operation['update']]);
                 $update = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -62,13 +62,13 @@ if (isset($_POST['operation'])) {
 }
 
 // POST data from database
-$sql = "SELECT d_id, d_pic, d_name, d_breed, d_gender, d_age, d_desc  FROM dogs";
+$sql = "SELECT d_id, d_pic, d_name, d_breed, d_gender, d_age, d_desc, walk_day  FROM dogs";
 $stmt = $pdo->query($sql);
 $dogs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <section class="main-cover main-cover-admin">
-    <a href="index.php">Back to Home</a>
+    <a href="../admins.php">Back to Menu</a>
     <div class="page-wrapper">
         <div class="block-title block-title--white">Admin</div>
     </div>
@@ -86,6 +86,7 @@ $dogs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td>Gender</td>
                     <td>Age</td>
                     <td>About your pet</td>
+                    <td>Walk Day</td>
                     <td colspan="2">Operations</td>
                 </tr>
                 <?php
@@ -99,6 +100,7 @@ $dogs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <td>' . $value['d_gender'] . '</td>
                                     <td>' . $value['d_age'] . '</td>
                                     <td>' . $value['d_desc'] . '</td>
+                                    <td>' . $value['walk_day'] . '</td>
                                     <td><button class="admin__table-button" type="submit" name="operation[update]" value="' . $value['d_id'] . '">Update</button></td>
                                     <td><button class="admin__table-button" type="submit" name="operation[delete]" value="' . $value['d_id'] . '">Delete</button></td>
                                 </tr>';
@@ -114,7 +116,7 @@ $dogs = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <section class="block">
         <div class="page-wrapper">
             <h1>Enter the data</h1>
-            <form class="admin__update" method="POST" enctype="multipart/form-data">
+            <form class="admin__update" action = "../uploadUser.php" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="operation[<?php echo key($operation) ?>]" value="<?php echo $operation[key($operation)] ?>">
                 <div class="update__item"><input placeholder="Photo" type="file" name='d_pic' value="<?php if(isset($update)){echo $update['d_pic'];} ?>"></div>
                 <div class="update__item"><input placeholder="Name" type="text" name='d_name' value="<?php if(isset($update)) {echo $update['d_name'];} ?>"></div>
@@ -122,8 +124,11 @@ $dogs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="update__item"><input placeholder="Gender" type="text" name='d_gender' value="<?php if(isset($update)){echo $update['d_gender'];} ?>"></div>
                 <div class="update__item"><input placeholder="Age" type="text" name='d_age' value="<?php if(isset($update)){echo $update['d_age'];} ?>"></div>
                 <textarea class = update__item placeholder="Description" name = 'd_desc'><?php if(isset($update)){echo $update['d_desc'];} ?></textarea>
-                <button class="admin__table-new" type="submit" name="submit" value="true">Send</button>
+                <div class="update__item"><input placeholder="WalkDay" type="text" name='walk_day' value="<?php if(isset($update)){echo $update['walk_day'];} ?>"></div>
+                <input type = "submit" class="admin__table-new" type="submit" name="submit" value="true">Send</input>
             </form>
         </div>
     </section>
 <?php } ?>
+<p>Click <a href="../logout.php">here</a> to Logout!</p>
+

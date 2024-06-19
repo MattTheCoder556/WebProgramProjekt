@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel = stylesheet type="text/css" href="adminCSS.css">
+    <link rel = stylesheet type="text/css" href="../CSS/adminCSS.css">
+    <link rel = stylesheet type="text/css" href="../CSS/adminDogsCSS.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title></title>
 </head>

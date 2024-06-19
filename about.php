@@ -11,13 +11,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Madimi+One&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="Images/CSS/aboutCSS.css">
+    <link rel="stylesheet" type="text/css" href="CSS/aboutCSS.css">
     <title>About Us</title>
 </head>
 <body>
 <?php
 require("db_config.php");
-//require("RegisterLogin/functions.php");
 
 try {
     $sql_str = "";

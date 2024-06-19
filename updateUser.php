@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Madimi+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="CSS/dogsCSS.css">
-    <title>User</title>
+    <title>User Profile</title>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -38,7 +38,6 @@
             </ul>
             <?php
             session_start();
-
             if(!isset($_SESSION['username'])){
                 echo '
                 <ul class="navbar-nav ms-auto">
@@ -50,8 +49,7 @@
                 </li>
             </ul>
                 ';
-            }
-            else{
+            } else {
                 echo'
                 <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
@@ -60,33 +58,57 @@
                 </ul>';
             }
             ?>
-
         </div>
     </div>
 </nav>
-<div class = "cards">
 <div class="container mt-4">
-    <div class = "square">
-    <div class="d-flex flex-column align-items-center">
-        <div class="img mb-3">
-            <?php
-            if (isset($_SESSION['profPic'])) {
-                $profPic = $_SESSION['profPic'];
-                echo '<img src="' . $profPic . '" class="profile-pic">';
-            }
-            ?>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <h5 class="card-header">Profile Information</h5>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data" action="uploadUser.php">
+                        <div class="mb-3">
+                            <label for="imgUp" class="form-label">Upload Profile Picture</label>
+                            <input class="form-control" type="file" id="imgUp" name="imgUp">
+                        </div>
+                        <input type = "hidden" name = "updateProfile">
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="text-center lighterSQ">
-            <p>Name: <br><?php echo isset($_SESSION['firstname']) ? $_SESSION['firstname'] : ''; echo ' '; echo isset($_SESSION['lastname']) ? $_SESSION['lastname'] : ''; ?></p>
-            <p>E-Mail: <br><?php echo isset($_SESSION['email']) ? $_SESSION['email'] : ''; ?></p>
-            <p>Phone Number: <br><?php echo isset($_SESSION['phone']) ? $_SESSION['phone'] : ''; ?></p>
-            <p>Address: <br><?php echo isset($_SESSION['address']) ? $_SESSION['address'] : ''; ?></p>
-            <p>Click <a href="updateUser.php">here</a> to update your Profile!</p>
-            <p>Click <a href="logout.php">here</a> to Logout!</p>
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <h5 class="card-header">Update Profile</h5>
+                <div class="card-body">
+                    <form method="post" action="uploadUser.php">
+                        <div class="mb-3">
+                            <label for="firstname" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="firstname" name="firstname" value="<?php echo isset($user_firstname) ? $user_firstname : ''; ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lastname" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="lastname" name="lastname" value="<?php echo isset($user_lastname) ? $user_lastname : ''; ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" value="<?php echo isset($user_email) ? $user_email : ''; ?>" >
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" value="<?php echo isset($user_phone) ? $user_phone : ''; ?>" >
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <textarea class="form-control" id="address" name="address" rows="3" ><?php echo isset($user_address) ? $user_address : ''; ?></textarea>
+                        </div>
+                        <button type="submit" name="updateProfile" class="btn btn-primary">Update</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
-    </div>
-</div>
 </div>
 </body>
 </html>

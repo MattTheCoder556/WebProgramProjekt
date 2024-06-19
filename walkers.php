@@ -8,23 +8,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Madimi+One&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="Images/CSS/dogsCSS.css">
-    <title>Our Dogs</title>
+    <link rel="stylesheet" type="text/css" href="CSS/dogsCSS.css">
+    <title>Our Walkers</title>
 </head>
 <body>
 <?php
 require("db_config.php");
-//require 'RegisterLogin/functions.php';
+session_start();
 
 try {
-    $sql_str = "";
-
-    if (isset($sql_str)) {
-        $sql = "SELECT u_pic, u_fname, u_lname, u_phone, u_email FROM users WHERE walk_switch != 0" . $sql_str;
-        $stmt = $pdo->query($sql);
-
-        $u = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+    $sql = "SELECT u_id, u_pic, u_fname, u_lname, u_phone, u_email FROM users WHERE walk_switch != 0";
+    $stmt = $pdo->query($sql);
+    $walkers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch(PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
 }
@@ -55,8 +50,6 @@ try {
                 </li>
             </ul>
             <?php
-            session_start();
-
             if(!isset($_SESSION['username'])){
                 echo '
                 <ul class="navbar-nav ms-auto">
@@ -68,8 +61,7 @@ try {
                 </li>
             </ul>
                 ';
-            }
-            else{
+            } else {
                 echo'
                 <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
@@ -81,27 +73,74 @@ try {
         </div>
     </div>
 </nav>
-<div class = "cards">
-<div class="row">
-    <?php
-    if (!empty($u)) {
-        foreach ($u as $key => $value) {
-            echo '
+<div class="cards">
+    <div class="row">
+        <?php
+        if (!empty($walkers)) {
+            foreach ($walkers as $walker) {
+                // Debugging output to check the file paths
+                $profilePicPath = 'ProfPic/' . $walker['u_pic'];
+//                if (!file_exists($profilePicPath)) {
+//                    echo '<p style="color: red;">Profile picture not found: ' . htmlspecialchars($profilePicPath) . '</p>';
+//                } else {
+//                    echo '<p style="color: green;">Profile picture found: ' . htmlspecialchars($profilePicPath) . '</p>';
+//                }
+
+                echo '
         <div class="col-lg-3 col-sm-6">
-            <div class="card">
-            <img src="ProfPic/'.$value['u_pic'].'" class="card-img-top">
-                <div class="card-body">
-                    <h5 class="card-title">'.$value['u_fname'].' '.$value['u_lname'].'</h5>
-                    <p class="card-text">'.$value['u_phone'].'<br>'.$value['u_email'].'</p>
+                    <div class="card">
+                        <img src="'.$profilePicPath.'" class="card-img-top" alt="Profile Picture">
+                        <div class="card-body">
+                            <h5 class="card-title">'.$walker['u_fname'].' '.$walker['u_lname'].'</h5>
+                            <p class="card-text">'.$walker['u_phone'].'<br>'.$walker['u_email'].'</p>';
+
+                // Check if the user is logged in
+                if(isset($_SESSION['username'])) {
+                    $userId = $_SESSION['u_id']; // User ID from session
+                    $walkerId = $walker['u_id'];
+
+                    // Check if the logged-in user is the same as the walker being displayed
+                    if ($userId == $walkerId) {
+                        echo '<p>You cannot rate yourself.</p>';
+                    } else {
+                        // Check if the user has already rated this walker
+                        $checkRatingSql = "SELECT * FROM ratings WHERE user_id = :user_id AND walker_id = :walker_id";
+                        $stmt = $pdo->prepare($checkRatingSql);
+                        $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+                        $stmt->bindParam(':walker_id', $walkerId, PDO::PARAM_INT);
+                        $stmt->execute();
+                        $ratingExists = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                        if ($ratingExists) {
+                            echo '<p>Thank you for rating!</p>';
+                        } else {
+                            echo '
+                        <form method="post" action="rate_walker.php">
+                            <input type="hidden" name="walker_id" value="'.$walkerId.'">
+                            <label for="rating">Rate this walker:</label>
+                            <select name="rating" id="rating">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>';
+                        }
+                    }
+                }
+
+                echo '
                 </div>
             </div>
         </div>';
+            }
+        } else {
+            echo '<p class="dogerror"> Something went wrong! </p>';
         }
-    } else {
-        echo '<p class="dogerror"> Something went wrong! </p>';
-    }
-    ?>
-</div>
+        ?>
+    </div>
 </div>
 </body>
 </html>

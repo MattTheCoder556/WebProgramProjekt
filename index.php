@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Madimi+One&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="Images/CSS/indexCSS.css">
+    <link rel="stylesheet" type="text/css" href="CSS/indexCSS.css">
     <title>Dogwalking</title>
 </head>
 <body>
@@ -23,14 +23,14 @@ require 'functions.php';
 try {
     $sql_str = "";
 
-    if (isset($sql_str)) {
-        // Fetch user data
-        $stmt = $pdo->query('SELECT u_fname, u_lname FROM users WHERE walk_switch = 1 AND u_rating >= 4'); // Adjust the query as needed
-        $u = $stmt->fetchAll();
+    $stmt = $pdo->prepare('SELECT u_fname, u_lname FROM users WHERE walk_switch = 1 AND u_rating >= 4 ORDER BY u_rating DESC LIMIT 5');
+    $stmt->execute();
+    $highestRatedWalkers = $stmt->fetchAll();
 
-        $stmt2 = $pdo->query('SELECT u_fname, u_lname FROM users WHERE walk_switch = 1'); // Adjust the query as needed
-        $u2 = $stmt2->fetchAll();
-    }
+    // Fetch top 5 most active walkers
+    $stmt2 = $pdo->prepare('SELECT u_fname, u_lname FROM users WHERE walk_switch = 1 ORDER BY activity_column DESC LIMIT 5'); // Replace `activity_column` with the appropriate column name for activity tracking
+    $stmt2->execute();
+    $mostActiveWalkers = $stmt2->fetchAll();
 
 } catch(PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
@@ -101,66 +101,53 @@ try {
     </div>
 </div>
 <div class="active">
-    <p class ="pr">Our top 5 Most Active Dog Walkers</p>
-    <div class = "row">
-        <div class = col-lg-1></div>
-        <?php
-        if (!empty($u2)) {
-            foreach ($u2 as $key => $value) {
-                $c = 1;
-                $c++;
-                if($c > 5){
-                    break;
-                }
-                echo'   
-           
-       <div class = "col-lg-2 col-md-4">
-           <div class="card">
-               <div class="card-body">
-                   <h5 class="card-title">"'. $value['u_fname'] ." ". $value['u_lname'] .'"</h5>
-                   <p class="card-text">Activity</p>
-               </div>
-           </div>
-       </div>';
-            }
-            }
-            else
-            {
-                echo '<p class="dogerror">No users posted right now</p>';
-            }
-            ?>
-    <br><br><br>
-    <p class="pr">Our 5 Top Rated Dog Walker</p>
-    <div class = "row">
-        <div class = col-lg-1>
+    <p class="pr">Our top 5 Most Active Dog Walkers</p>
+    <div class="row">
+        <div class = "col-1">
         </div>
         <?php
-        if (!empty($u)) {
-            foreach ($u as $key => $value) {
-                $c = 1;
-                $c++;
-                if($c > 5){
-                    break;
-                }
-                echo'   
-           
-       <div class = "col-lg-2 col-md-4">
-           <div class="card">
-               <div class="card-body">
-                   <h5 class="card-title">"'. $value['u_fname'] ." ". $value['u_lname'] .'"</h5>
-                   <p class="card-text">Rating</p>
-               </div>
-           </div>
-       </div>';
+        if (!empty($mostActiveWalkers)) {
+            foreach ($mostActiveWalkers as $walker) {
+                echo '
+                    <div class="col-lg-2 col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">' . $walker['u_fname'] . ' ' . $walker['u_lname'] . '</h5>
+                                <p class="card-text">Activity</p>
+                            </div>
+                        </div>
+                    </div>';
             }
-        }
-        else
-        {
-            echo '<p class="dogerror">No users posted right now</p>';
+        } else {
+            echo '<p class="dogerror">No active users right now</p>';
         }
         ?>
     </div>
-    <a href = "Admins/adminUsers.php">To admin</a>
+    <br><br><br>
+    <p class="pr">Our 5 Top Rated Dog Walkers</p>
+    <div class="row">
+        <?php
+        if (!empty($highestRatedWalkers)) {
+            foreach ($highestRatedWalkers as $walker) {
+                echo '
+                    <div class="col-lg-2 col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">' . $walker['u_fname'] . ' ' . $walker['u_lname'] . '</h5>
+                                <p class="card-text">Rating</p>
+                            </div>
+                        </div>
+                    </div>';
+            }
+        } else {
+            echo '<p class="dogerror">No highly rated users right now</p>';
+        }
+        ?>
+        <div class = "col-1">
+        </div>
+    </div>
+    <a href="Admins/adminUsers.php">To admin</a>
+</div>
 </body>
 </html>
 

@@ -82,13 +82,13 @@ function existsUser(PDO $pdo, string $email): bool {
  * @param bool $wSwitch
  * @return int
  */
-function registerUser(PDO $pdo, string $profilePic, string $password, string $firstname, string $lastname, string $email, string $address, string $token, string $phoneNum, bool $wSwitch): int {
+function registerUser   (PDO $pdo, string $password, string $firstname, string $lastname, string $email, string $address, string $token, string $phoneNum, bool $wSwitch): int {
     $passwordHashed = password_hash($password, PASSWORD_DEFAULT);
 
-    $sql = "INSERT INTO users (u_pic, u_fname, u_lname, u_email, u_pass, u_phone, u_address, walk_switch, registration_token, registration_expires, active)
-            VALUES (:profPic, :firstname, :lastname, :email, :passwordHashed, :phone, :address, :switch, :token, DATE_ADD(now(), INTERVAL 1 DAY), 0)";
+    $sql = "INSERT INTO users (u_fname, u_lname, u_email, u_pass, u_phone, u_address, walk_switch, registration_token, registration_expires, active)
+            VALUES (:firstname, :lastname, :email, :passwordHashed, :phone, :address, :switch, :token, DATE_ADD(now(), INTERVAL 1 DAY), 0)";
     $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':profPic', $profilePic, PDO::PARAM_STR);
+   // $stmt->bindParam(':profPic', $profilePic, PDO::PARAM_STR);
     $stmt->bindParam(':firstname', $firstname, PDO::PARAM_STR);
     $stmt->bindParam(':lastname', $lastname, PDO::PARAM_STR);
     $stmt->bindParam(':email', $email, PDO::PARAM_STR);
@@ -177,7 +177,7 @@ function sendEmail(PDO $pdo, string $email, array $emailData, string $body, int 
 
 
             //Recipients
-            $mail->setFrom('duke@duke.stud.vts.su.ac.rs', 'Mailer');
+            $mail->setFrom('duke@duke.stud.vts.su.ac.rs', 'The Duke');
             $mail->addAddress($email, 'User');     //Add a recipient
             //$mail->addAddress('ellen@example.com');               //Name is optional
             //$mail->addReplyTo('info@example.com', 'Information');
@@ -250,6 +250,16 @@ function setForgottenToken(PDO $pdo, string $email, string $token): void {
     $sql = "UPDATE users SET forgotten_password_token = :token, forgotten_password_expires = DATE_ADD(now(), INTERVAL 6 HOUR) WHERE u_email = :email";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':token', $token, PDO::PARAM_STR);
+    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+    $stmt->execute();
+}
+
+function upload_profile_pic($name, $email)
+{
+    global $conn;
+    $sql = "UPDATE users SET profile_pic =:name  WHERE email=:email";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':name', $name, PDO::PARAM_STR);
     $stmt->bindParam(':email', $email, PDO::PARAM_STR);
     $stmt->execute();
 }
