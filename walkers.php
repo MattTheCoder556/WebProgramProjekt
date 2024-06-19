@@ -2,24 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Madimi+One&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="dogsCSS.css">
+    <link rel="stylesheet" type="text/css" href="Images/CSS/dogsCSS.css">
     <title>Our Dogs</title>
 </head>
 <body>
 <?php
 require("db_config.php");
-require 'functions.php';
+//require 'RegisterLogin/functions.php';
 
 try {
     $sql_str = "";
 
     if (isset($sql_str)) {
-        $sql = "SELECT u_fname, u_lname, u_phone, u_email, walk_switch FROM users WHERE walk_switch != NULL" . $sql_str;
+        $sql = "SELECT u_pic, u_fname, u_lname, u_phone, u_email FROM users WHERE walk_switch != 0" . $sql_str;
         $stmt = $pdo->query($sql);
 
         $u = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -54,7 +55,9 @@ try {
                 </li>
             </ul>
             <?php
-            if(!isset($u['registration_token'])) {
+            session_start();
+
+            if(!isset($_SESSION['username'])){
                 echo '
                 <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
@@ -70,14 +73,15 @@ try {
                 echo'
                 <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="user.php"><i class="bi bi-person-fill"></i></a>
+                    <a class="nav-link" href="user.php"><i class="bi bi-person-fill"></i>&nbsp;Profile</a>
                 </li>
-                ';
+                </ul>';
             }
             ?>
         </div>
     </div>
 </nav>
+<div class = "cards">
 <div class="row">
     <?php
     if (!empty($u)) {
@@ -85,10 +89,10 @@ try {
             echo '
         <div class="col-lg-3 col-sm-6">
             <div class="card">
+            <img src="ProfPic/'.$value['u_pic'].'" class="card-img-top">
                 <div class="card-body">
-                    <h5 class="card-title">'.$value['u_fname'].'" "'.$value['u_lname'].'</h5>
+                    <h5 class="card-title">'.$value['u_fname'].' '.$value['u_lname'].'</h5>
                     <p class="card-text">'.$value['u_phone'].'<br>'.$value['u_email'].'</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
                 </div>
             </div>
         </div>';
@@ -97,6 +101,7 @@ try {
         echo '<p class="dogerror"> Something went wrong! </p>';
     }
     ?>
+</div>
 </div>
 </body>
 </html>

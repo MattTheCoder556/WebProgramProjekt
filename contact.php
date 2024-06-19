@@ -2,18 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Madimi+One&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="contactCSS.css">
+    <link rel="stylesheet" type="text/css" href="Images/CSS/contactCSS.css">
     <title>Contact</title>
 </head>
 <body>
 <?php
 require("db_config.php");
-require 'functions.php';
+//require 'RegisterLogin/functions.php';
 
 try {
     $sql_str = "";
@@ -53,7 +54,9 @@ try {
                 </li>
             </ul>
             <?php
-            if(!isset($u['registration_token'])) {
+            session_start();
+
+            if(!isset($_SESSION['username'])){
                 echo '
                 <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
@@ -69,9 +72,9 @@ try {
                 echo'
                 <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="user.php"><i class="bi bi-person-fill"></i></a>
+                    <a class="nav-link" href="user.php"><i class="bi bi-person-fill"></i>&nbsp;Profile</a>
                 </li>
-                ';
+                </ul>';
             }
             ?>
         </div>
@@ -81,6 +84,9 @@ try {
     <h1>Contact Us!</h1>
     <p class = "cont">Having any issues, complaints or gratitude to share? Feel free to contact us at</p>
     <h3 class = "email">examplemail@dogwalking.com</h3>
+</div>
+<div class = "dogimg">
+    <img src = "Images/towfiqu-barbhuiya-0ZUoBtLw3y4-unsplash.jpg" style = "height: 300px; width: 500px">
 </div>
 <div class = "bann2">
 <p>Want to express your feelings a bit simpler? Rate Us! We'll take note of all of them.</p>

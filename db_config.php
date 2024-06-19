@@ -1,26 +1,50 @@
 <?php
-const PARAMS = [
-    "HOST" => 'localhost',
-    "USER" => 'root',
-    "PASS" => '',
-    "DBNAME" => 'dogwalkxampp',
-    "CHARSET" => 'utf8mb4'
-];
+//const PARAMS = [
+//    "HOST" => 'localhost',
+//    "USER" => 'root',
+//    "PASS" => '',
+//    "DBNAME" => 'dogwalkxampp',
+//    "CHARSET" => 'utf8mb4'
+//];
+//
+//$dsn = "mysql:host=" . PARAMS['HOST'] . ";dbname=" . PARAMS['DBNAME'] . ";charset=" . PARAMS['CHARSET'];
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "dogwalkxampp";
 
-$dsn = "mysql:host=" . PARAMS['HOST'] . ";dbname=" . PARAMS['DBNAME'] . ";charset=" . PARAMS['CHARSET'];
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-require 'PHPMailer/src/Exception.php';
-require 'PHPMailer/src/PHPMailer.php';
-require 'PHPMailer/src/SMTP.php';
+try {
+    $pdo = new PDO("mysql:host=$servername;dbname=$dbname;charset=utf8", $username, $password);
+    // Set PDO error mode to exception
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+
+} catch (PDOException $e) {
+    die("Connection failed: " . $e->getMessage());
+}
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+
+
+//if (!class_exists('PHPMailer\PHPMailer\Exception')){
+//    require 'PHPMailer/src/Exception.php';
+//    require 'PHPMailer/src/PHPMailer.php';
+//    require 'PHPMailer/src/SMTP.php';
+//}
+
 
 const SITE = 'http://localhost/NegyedikSzemeszter/DogWalk/';
-
+//
 $actions = ['login', 'register', 'forget'];
-
+//
 $pdoOptions = [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -51,8 +75,8 @@ $messages = [
 
 $emailMessages = [
     'register' => [
-        'subject' => 'Register on web site',
-        'altBody' => 'This is the body in plain text for non-HTML mail clients'
+        'subject' => 'Subject',
+        'altBody' => 'AltBod'
     ],
     'forget' => [
         'subject' => 'Forgotten password - create new password',

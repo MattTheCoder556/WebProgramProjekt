@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="registerCSS.css">
+    <link rel="stylesheet" type="text/css" href="Images/CSS/registerCSS.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Madimi+One&display=swap" rel="stylesheet">
@@ -15,7 +15,10 @@
 <div class = "main">
     <h1>Register</h1>
     <br><br>
-    <form action="web.php" method = "POST" name = "form1">
+    <form action="web.php" method = "POST" name = "form1" enctype="multipart/form-data">
+        <label for="profPic">Profile Picture: </label>
+        <input type="file" id="profPic" name="profilePic">
+        <br><br>
         <label for="fname">First Name: </label>
         <input type="text" id="fname" name="firstname">
         <br><br><br>
@@ -62,6 +65,7 @@
         }
         ?>
     </form>
+    <p>Already have an account? Click <a href = "login.php">here</a> to login!</p>
 </div>
 </body>
 </html>

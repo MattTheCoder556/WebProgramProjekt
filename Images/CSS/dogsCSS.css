@@ -1,0 +1,62 @@
+body{
+    overflow-x: hidden;
+    text-align: center;
+    background-image: url("../dog_and_cat_pattern-11.jpg");
+    background-repeat: repeat;
+    background-size: contain;
+    font-family: "Madimi One", sans-serif;
+    background-attachment: fixed;
+}
+.card-img-top{
+    height: 19rem;
+}
+.cards{
+    margin: 5px;
+    background: rgba(20, 44, 38, 80%);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.card{
+    margin: 5px;
+}
+
+.butt_add{
+    background-color: cornflowerblue;
+    padding: 15px;
+    color: #181a1f;
+    margin: 10px;
+}
+
+.square{
+    background-color: rgba(180, 180, 180, 90%);
+    border-radius: 10px;
+}
+
+.uImage{
+    height: 400px;
+    width: 500px;
+    border-radius: 25px;
+    display: inline-block;
+    border: 1px solid;
+}
+
+.text{
+    width: 500px;
+    text-align: center;
+    padding-top: 35px;
+    padding-bottom: 15px;
+    background-color: rgb(190, 190, 190);
+    border-radius: 10px;
+}
+
+.img{
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.tit{
+    background-color: rgba(180, 180, 180, 80%);
+    border-radius: 5px;
+    padding-bottom: 10px;
+}

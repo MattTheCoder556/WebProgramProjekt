@@ -11,18 +11,19 @@
             content="width=device-width,
                    initial-scale=1.0"
     />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Madimi+One&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="dogsCSS.css">
+    <link rel="stylesheet" type="text/css" href="Images/CSS/dogsCSS.css">
     <title>Our Dogs</title>
 </head>
 <body>
 <?php
 require("db_config.php");
-require 'functions.php';
+//require 'RegisterLogin/functions.php';
 
 try {
     $sql_str = "";
@@ -36,36 +37,37 @@ try {
 } catch(PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
 
-/*if (isset($_GET['search']) && !empty($_GET['search'])) {
-    $search = $_GET['search'];
-    $search_arr = explode(' ', $search);
-    $search_terms = array_filter($search_arr, function($value) {
-        return mb_strlen($value) > 2;
-    });
+    /*if (isset($_GET['search']) && !empty($_GET['search'])) {
+        $search = $_GET['search'];
+        $search_arr = explode(' ', $search);
+        $search_terms = array_filter($search_arr, function($value) {
+            return mb_strlen($value) > 2;
+        });
 
-    if (!empty($search_terms)) {
-        $where = array();
-        foreach ($search_terms as $term) {
-            $where[] = "d_name LIKE ? OR d_breed LIKE ? OR d_gender LIKE ? OR d_age LIKE ?";
+        if (!empty($search_terms)) {
+            $where = array();
+            foreach ($search_terms as $term) {
+                $where[] = "d_name LIKE ? OR d_breed LIKE ? OR d_gender LIKE ? OR d_age LIKE ?";
+            }
+            $where_clause = implode(' OR ', $where);
+            $sql = "SELECT * FROM dogs WHERE '$where_clause'";
+
+            $stmt = $pdo->prepare($sql);
+
+            // Bind parameters
+            $param = '%' . $search . '%';
+            $params = array_fill(0, count($search_terms) * 2, $param);
+            $i = 1;
+            foreach ($params as $param) {
+                $stmt->bindParam($i++, $param, PDO::PARAM_STR);
+            }
+
+            $stmt->execute();
+
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
-        $where_clause = implode(' OR ', $where);
-        $sql = "SELECT * FROM dogs WHERE '$where_clause'";
-
-        $stmt = $pdo->prepare($sql);
-
-        // Bind parameters
-        $param = '%' . $search . '%';
-        $params = array_fill(0, count($search_terms) * 2, $param);
-        $i = 1;
-        foreach ($params as $param) {
-            $stmt->bindParam($i++, $param, PDO::PARAM_STR);
-        }
-
-        $stmt->execute();
-
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-}*/
+    }*/
 }
 ?>
 
@@ -94,7 +96,9 @@ try {
                 </li>
             </ul>
             <?php
-            if(!isset($u['registration_token'])) {
+            session_start();
+
+            if(!isset($_SESSION['username'])){
                 echo '
                 <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
@@ -110,9 +114,9 @@ try {
                 echo'
                 <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="user.php"><i class="bi bi-person-fill"></i></a>
+                    <a class="nav-link" href="user.php"><i class="bi bi-person-fill"></i>&nbsp;Profile</a>
                 </li>
-                ';
+                </ul>';
             }
             ?>
         </div>
@@ -120,10 +124,10 @@ try {
 </nav>
 </body>
 <div class="cards">
-    <!--<form class="product-search" method="get">
+    <form class="product-search" method="get">
         <input placeholder="Search" name="search" type="text">
         <button type="submit">Go</button>
-    </form>-->
+    </form>
     <div class="row">
         <?php
         if (!empty($dogs)) {
@@ -133,9 +137,8 @@ try {
             <div class="card">
                 <img src="Images/'.$value['d_pic'].'" class="card-img-top">
                 <div class="card-body">
-                    <h5 class="card-title">'.$value['d_name'].'</h5>
-                    <p class="card-text">'.$value['d_breed'].'<br>'.$value['d_gender'].'<br>'.$value['d_age'].'<br>'.$value['d_desc'].'</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                    <h5 class="card-title">Name: '.$value['d_name'].'</h5>
+                    <p class="card-text">Breed: '.$value['d_breed'].'<br>Gender: '.$value['d_gender'].'<br>Age: '.$value['d_age'].'<br>Description: '.$value['d_desc'].'</p>
                 </div>
             </div>
         </div>';
@@ -181,28 +184,32 @@ try {
         }
     </style>
 
+    <?php
+if(isset($_SESSION['username'])) {
+    echo '
+<div class = "tit"> 
     <h3>
         Add your pet here!
     </h3>
     <button id = "addNew" name = "click" style = "border-radius: 10px">Click me</button>
-
+</div>
         <div id="myPopup" class="popup">
             <div class="popup-content" style = "border: 1px solid; padding: 5px; border-radius: 10px; text-align: center">
                 <h4>Insert information about your pet!</h4>
                 <div style = "border: 1px solid; padding: 5px; border-radius: 10px; text-align: center">
                     <form name = "addPet" method = "POST" enctype="multipart/form-data" action = "upload.php">
                         <label for = "file">Picture: </label><br>
-                        <input placeholder="Photo" type="file" name='d_pic'><br>
+                        <input placeholder="Photo" type="file" name="d_pic"><br>
                         <label for = "name">Name: </label><br>
-                        <input placeholder="Name" type="text" name='d_name'><br>
+                        <input placeholder="Name" type="text" name="d_name"><br>
                         <label for = "breed">Breed: </label><br>
-                        <input placeholder="Breed" type="text" name='d_breed'><br>
+                        <input placeholder="Breed" type="text" name="d_breed"><br>
                         <label for = "gender">Gender: </label><br>
-                        <input placeholder="Gender" type="text" name='d_gender'><br>
+                        <input placeholder="Gender" type="text" name="d_gender"><br>
                         <label for = "age">Age: </label><br>
-                        <input placeholder="Age" type="text" name='d_age'><br>
+                        <input placeholder="Age" type="text" name="d_age"><br>
                         <label for = "desc" style = "text-align: center">About your pet: </label><br>
-                        <textarea placeholder="Description" name = 'd_desc' rows="7"></textarea><br>
+                        <textarea placeholder="Description" name = "d_desc" rows="7"></textarea><br>
                         <input type = "submit" name="submit" value="Submit" onclick="refreshPage()">
                         <script>
                             if ( window.history.replaceState ) {
@@ -217,5 +224,8 @@ try {
             </div>
         </div>
     <script src = "popupWindow.js"></script>
+    ';
+};?>
+
 </div>
 </html>

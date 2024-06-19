@@ -1,72 +1,52 @@
 <?php
+ob_start();
+// Ensure these are at the top of your file
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-//require 'PHPMailer/src/Exception.php';
-//require 'PHPMailer/src/PHPMailer.php';
-//require 'PHPMailer/src/SMTP.php';
 
-require_once 'db_config.php';
 
-$pdo = connectDatabase($dsn, $pdoOptions);
-$GLOBALS['pdo'] = $pdo;
-//$GLOBALS['pdo'] = connectDatabase($connection, $pdoOptions);
-
-/** Function tries to connect to database using PDO
- * @param string $connection
- * @param array $pdoOptions
- * @return PDO
- */
-function connectDatabase(string $connection, array $pdoOptions): PDO
-{
-
-    try {
-        $pdo = new PDO($connection, PARAMS['USER'], PARAMS['PASS'], $pdoOptions);
-    } catch (\PDOException $e) {
-        var_dump($e->getCode());
-        throw new \PDOException($e->getMessage());
-    }
-
-    return $pdo;
-}
-
+require_once "db_config.php";
 
 /**
- * Function redirects user to given url
+ * Function redirects user to given URL
  *
  * @param string $url
  */
-function redirection($url)
-{
+function redirection($url) {
     header("Location:$url");
     exit();
 }
 
-
 /**
- * Function checks that login parameters exists in users_web table
+ * Function checks that login parameters exist in users table
  *
  * @param string $email
  * @param string $enteredPassword
  * @return array
  */
-function checkUserLogin(string $email, string $enteredPassword): array
-{
-    $sql = "SELECT u_id, u_pass FROM users WHERE u_email=:email AND active=1 AND is_banned = 0 LIMIT 0,1";
-    $stmt = $GLOBALS['pdo']->prepare($sql);
+function checkUserLogin(string $email, string $enteredPassword): array {
+    global $pdo;
+
+    $sql = "SELECT u_id, u_pic AS profPic, u_pass, u_fname AS firstname, u_lname AS lastname, u_email AS email, u_phone AS phone, u_address AS address FROM users WHERE u_email=:email AND active = 1 AND is_banned = 0 LIMIT 1";
+    $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':email', $email, PDO::PARAM_STR);
 
-    $data = [];
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    $data = [];
     if ($stmt->rowCount() > 0) {
-
         $registeredPassword = $result['u_pass'];
-
         if (password_verify($enteredPassword, $registeredPassword)) {
             $data['u_id'] = $result['u_id'];
+            $data['firstname'] = $result['firstname'];
+            $data['lastname'] = $result['lastname'];
+            $data['email'] = $result['email'];
+            $data['phone'] = $result['phone'];
+            $data['address'] = $result['address'];
+            $data['profPic'] = $result['profPic'];
         }
     }
 
@@ -80,67 +60,59 @@ function checkUserLogin(string $email, string $enteredPassword): array
  * @param string $email
  * @return bool
  */
-function existsUser(PDO $pdo, string $email): bool
-{
-
-    $sql = "SELECT u_id FROM users WHERE u_email=:email AND (registration_expires>now() OR active ='1') LIMIT 0,1";
+function existsUser(PDO $pdo, string $email): bool {
+    $sql = "SELECT COUNT(*) FROM users WHERE u_email = :email";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':email', $email, PDO::PARAM_STR);
     $stmt->execute();
-    $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($stmt->rowCount() > 0) {
-        return true;
-    } else {
-        return false;
-    }
+    return $stmt->fetchColumn() > 0;
 }
 
-
-/**Function registers user and returns id of created user
+/**
+ * Function registers user and returns ID of created user
  * @param PDO $pdo
  * @param string $password
  * @param string $firstname
  * @param string $lastname
  * @param string $email
+ * @param string $address
  * @param string $token
+ * @param string $phoneNum
+ * @param bool $wSwitch
  * @return int
  */
-function registerUser(PDO $pdo, string $password, string $firstname, string $lastname, string $email, string $token, string $address, string $phoneNum, bool $wSwitch): int
-{
-
+function registerUser(PDO $pdo, string $profilePic, string $password, string $firstname, string $lastname, string $email, string $address, string $token, string $phoneNum, bool $wSwitch): int {
     $passwordHashed = password_hash($password, PASSWORD_DEFAULT);
 
-    $sql = "INSERT INTO users(u_pass,u_fname,u_lname,u_email, u_address, u_phone, walk_switch,registration_token, registration_expires,active)
-            VALUES (:passwordHashed,:firstname,:lastname,:email,:address,:phone, :switch,:token,DATE_ADD(now(),INTERVAL 1 DAY),0)";
+    $sql = "INSERT INTO users (u_pic, u_fname, u_lname, u_email, u_pass, u_phone, u_address, walk_switch, registration_token, registration_expires, active)
+            VALUES (:profPic, :firstname, :lastname, :email, :passwordHashed, :phone, :address, :switch, :token, DATE_ADD(now(), INTERVAL 1 DAY), 0)";
     $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':passwordHashed', $passwordHashed, PDO::PARAM_STR);
+    $stmt->bindParam(':profPic', $profilePic, PDO::PARAM_STR);
     $stmt->bindParam(':firstname', $firstname, PDO::PARAM_STR);
     $stmt->bindParam(':lastname', $lastname, PDO::PARAM_STR);
     $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-    $stmt->bindParam(':address', $address, PDO::PARAM_STR);
+    $stmt->bindParam(':passwordHashed', $passwordHashed, PDO::PARAM_STR);
     $stmt->bindParam(':phone', $phoneNum, PDO::PARAM_STR);
-    $stmt->bindParam(':switch', $wSwitch, PDO::PARAM_STR);
+    $stmt->bindParam(':address', $address, PDO::PARAM_STR);
+    $stmt->bindValue(':switch', $wSwitch, PDO::PARAM_INT); // PDO::PARAM_BOOL could be problematic in some databases
     $stmt->bindParam(':token', $token, PDO::PARAM_STR);
+
     $stmt->execute();
 
-    // http://dev.mysql.com/doc/refman/5.6/en/date-and-time-functions.html
-
     return $pdo->lastInsertId();
-
 }
 
 
-/** Function creates random token for given length in bytes
+/**
+ * Function creates random token for given length in bytes
  * @param int $length
  * @return string|null
  */
-function createToken(int $length): ?string
-{
+function createToken(int $length): ?string {
     try {
         return bin2hex(random_bytes($length));
     } catch (\Exception $e) {
-        // c:xampp/apache/logs/
         error_log("****************************************");
         error_log($e->getMessage());
         error_log("file:" . $e->getFile() . " line:" . $e->getLine());
@@ -154,34 +126,27 @@ function createToken(int $length): ?string
  * @param $length
  * @return string
  */
-function createCode($length): string
-{
+function createCode($length): string {
     $down = 97;
     $up = 122;
     $i = 0;
     $code = "";
 
-    /*
-      48-57  = 0 - 9
-      65-90  = A - Z
-      97-122 = a - z
-    */
-
-    $div = mt_rand(3, 9); // 3
+    $div = mt_rand(3, 9);
 
     while ($i < $length) {
         if ($i % $div == 0)
             $character = strtoupper(chr(mt_rand($down, $up)));
         else
-            $character = chr(mt_rand($down, $up)); // mt_rand(97,122) chr(98)
-        $code .= $character; // $code = $code.$character; //
+            $character = chr(mt_rand($down, $up));
+        $code .= $character;
         $i++;
     }
     return $code;
 }
 
-
-/** Function tries to send email with activation code
+/**
+ * Function tries to send email with activation code
  * @param PDO $pdo
  * @param string $email
  * @param array $emailData
@@ -189,69 +154,66 @@ function createCode($length): string
  * @param int $id_user
  * @return void
  */
-function sendEmail(PDO $pdo, string $email, array $emailData, string $body, int $id_user): void
-{
+function sendEmail(PDO $pdo, string $email, array $emailData, string $body, int $id_user): void {
 
-    $phpmailer = new PHPMailer(true);
+    if(!isset($email, $title, $message, $radio)){
 
-    try {
+        require 'PHPMailer/src/Exception.php';
+        require 'PHPMailer/src/PHPMailer.php';
+        require 'PHPMailer/src/SMTP.php';
 
-        $phpmailer = new PHPMailer();
-        $phpmailer->isSMTP();
-        $phpmailer->Host = 'sandbox.smtp.mailtrap.io';
-        $phpmailer->SMTPAuth = true;
-        $phpmailer->Port = 2525;
-        $phpmailer->Username = 'f6da5bcd99f983';
-        $phpmailer->Password = '144cb7178083e0';
+        $mail = new PHPMailer(true);
 
-        $phpmailer->setFrom('webmaster@example.com', 'Webmaster');
-        $phpmailer->addAddress("$email");
+        try {
+            //Server settings
+            $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+            $mail->isSMTP();                                            //Send using SMTP
+            $mail->Host = 'mail.duke.stud.vts.su.ac.rs';                     //Set the SMTP server to send through
+            $mail->SMTPAuth = true;                                   //Enable SMTP authentication
+            $mail->Username = 'duke';                     //SMTP username
+            $mail->Password = 'c826FtxhnVDUmK3';                               //SMTP password
+            $mail->SMTPSecure = 'tls';
+            $mail->Port = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
-        $phpmailer->isHTML(true);
-        $phpmailer->Subject = $emailData['subject'];
-        $phpmailer->Body = $body;
-        $phpmailer->AltBody = $emailData['altBody'];
 
-        $phpmailer->send();
-    } catch (Exception $e) {
-        $message = "Message could not be sent. Mailer Error: {$phpmailer->ErrorInfo}";
-        addEmailFailure($pdo, $id_user, $message);
+            //Recipients
+            $mail->setFrom('duke@duke.stud.vts.su.ac.rs', 'Mailer');
+            $mail->addAddress($email, 'User');     //Add a recipient
+            //$mail->addAddress('ellen@example.com');               //Name is optional
+            //$mail->addReplyTo('info@example.com', 'Information');
+            $mail->addCC('cc@example.com');
+            $mail->addBCC('bcc@example.com');
+
+            //Content
+
+            $mail->isHTML(true);
+            $mail->Subject = "Register";
+            $mail->Body = $body;
+            //$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+            $mail->send();
+            echo 'Message has been sent';
+        } catch (Exception $e) {
+            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        }
     }
-
 }
-
 
 /**
- * @param PDO $pdo
- * @param string $email
- * @return bool
- * @throws Exception
- */
-function sendForgetPasswordToken(PDO $pdo, string $email): bool
-{
-    $token = createToken(20);
-
-    return true;
-}
-
-
-/** Function inserts data in database for e-mail sending failure
+ * Function inserts data in database for e-mail sending failure
  * @param PDO $pdo
  * @param int $id_user
  * @param string $message
  * @return void
  */
-/*function addEmailFailure(PDO $pdo, int $id_user, string $message): void
-{
+function addEmailFailure(PDO $pdo, int $id_user, string $message): void {
     $sql = "INSERT INTO user_email_failures (id_user, message, date_time_added)
-            VALUES (:id_user,:message, now())";
+            VALUES (:id_user, :message, now())";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
     $stmt->bindParam(':message', $message, PDO::PARAM_STR);
     $stmt->execute();
-
-}*/
-
+}
 
 /**
  * Function returns user data for given field and given value
@@ -261,9 +223,8 @@ function sendForgetPasswordToken(PDO $pdo, string $email): bool
  * @param mixed $value
  * @return mixed
  */
-/*function getUserData(PDO $pdo, string $data, string $field, string $value): string
-{
-    $sql = "SELECT $data as data FROM userschole2 WHERE $field=:value LIMIT 0,1";
+function getUserData(PDO $pdo, string $data, string $field, string $value): string {
+    $sql = "SELECT $data as data FROM users WHERE $field = :value LIMIT 0,1";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':value', $value, PDO::PARAM_STR);
     $stmt->execute();
@@ -276,7 +237,7 @@ function sendForgetPasswordToken(PDO $pdo, string $email): bool
     }
 
     return $data;
-}*/
+}
 
 /**
  * Function sets the forgotten token
@@ -285,13 +246,11 @@ function sendForgetPasswordToken(PDO $pdo, string $email): bool
  * @param string $token
  * @return void
  */
-function setForgottenToken(PDO $pdo, string $email, string $token): void
-{
-    $sql = "UPDATE users SET forgotten_password_token = :token, forgotten_password_expires = DATE_ADD(now(),INTERVAL 6 HOUR) WHERE u_email = :email";
+function setForgottenToken(PDO $pdo, string $email, string $token): void {
+    $sql = "UPDATE users SET forgotten_password_token = :token, forgotten_password_expires = DATE_ADD(now(), INTERVAL 6 HOUR) WHERE u_email = :email";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':token', $token, PDO::PARAM_STR);
     $stmt->bindParam(':email', $email, PDO::PARAM_STR);
     $stmt->execute();
 }
-
 ?>
