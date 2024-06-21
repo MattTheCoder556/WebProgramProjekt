@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require_once "db_config.php";
 require_once "functions.php";
 // https://www.php.net/manual/en/reserved.variables.request
@@ -72,11 +75,16 @@ switch ($method) {
 
             $passwordHashed = password_hash($resetPassword, PASSWORD_DEFAULT);
 
-            $sql = "UPDATE users SET forgotten_password_token = '', forgotten_password_expires = '', u_pass = :resetPassword
+    $expiryTime = date('Y-m-d H:i:s', strtotime('+1 hour'));
+
+
+            $sql = "UPDATE users SET forgotten_password_token = '', forgotten_password_expires = :expiryTime, u_pass = :resetPassword
             WHERE binary forgotten_password_token = :token AND forgotten_password_expires>now() AND active = 1 AND u_email = :email";
 
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(':resetPassword', $passwordHashed, PDO::PARAM_STR);
+        $stmt->bindParam(':expiryTime', $expiryTime, PDO::PARAM_STR);
+
             $stmt->bindParam(':token', $token, PDO::PARAM_STR);
             $stmt->bindParam(':email', $resetEmail, PDO::PARAM_STR);
             $stmt->execute();
@@ -92,6 +100,5 @@ switch ($method) {
         }
         break;
 }
-
-
+?>
 

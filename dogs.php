@@ -1,3 +1,39 @@
+<?php
+// Include necessary files and establish database connection
+require_once 'db_config.php';
+require_once 'functions.php';
+
+session_start(); // Start session if not already started
+
+// Function to check if the user is a dog walker
+function isDogWalker($username, $pdo) {
+    $sql = "SELECT u_id, walk_switch FROM users WHERE u_email = :username AND walk_switch = 1";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+// Check if the user is a dog walker
+$isDogWalker = false;
+if (isset($_SESSION['username'])) {
+    $walkerData = isDogWalker($_SESSION['username'], $pdo);
+    if ($walkerData && isset($walkerData['u_id'])) {
+        $isDogWalker = true;
+        $walker_id = $walkerData['u_id'];
+    }
+}
+
+// Fetch dogs information
+try {
+    $sql = "SELECT d_id, d_pic, d_name, d_breed, d_gender, d_age, d_desc, walk_day, booked_by FROM dogs";
+    $stmt = $pdo->query($sql);
+    $dogs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch(PDOException $e) {
+    echo "Connection failed: " . $e->getMessage();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,42 +79,6 @@
     <title>Our Dogs</title>
 </head>
 <body>
-<?php
-require("db_config.php");
-session_start();
-
-function isDogWalker($username, $pdo) {
-    $sql = "SELECT walk_switch FROM users WHERE u_email = :username AND walk_switch = 1";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':username', $username, PDO::PARAM_STR);
-    $stmt->execute();
-    return $stmt->fetch(PDO::FETCH_ASSOC);
-}
-
-$search = isset($_GET['search']) ? $_GET['search'] : '';
-
-try {
-    $sql = "SELECT d_id, d_pic, d_name, d_breed, d_gender, d_age, d_desc, walk_day, booked_by FROM dogs";
-    if (!empty($search)) {
-        $sql .= " WHERE d_name LIKE :search OR d_breed LIKE :search OR d_gender LIKE :search OR d_age LIKE :search OR d_desc LIKE :search";
-    }
-    $stmt = $pdo->prepare($sql);
-    if (!empty($search)) {
-        $searchParam = '%' . $search . '%';
-        $stmt->bindParam(':search', $searchParam, PDO::PARAM_STR);
-    }
-    $stmt->execute();
-    $dogs = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch(PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
-}
-
-$isDogWalker = false;
-if (isset($_SESSION['username'])) {
-    $isDogWalker = isDogWalker($_SESSION['username'], $pdo);
-}
-?>
-
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Zoomies</a>
@@ -129,7 +129,7 @@ if (isset($_SESSION['username'])) {
 
 <div class="cards">
     <form class="product-search" method="get" action="dogs.php">
-        <input placeholder="Search" name="search" type="text" value="<?php echo htmlspecialchars($search); ?>">
+        <input placeholder="Search" name="search" type="text" value="<?php echo htmlspecialchars(isset($_GET['search']) ? $_GET['search'] : ''); ?>">
         <button type="submit">Go</button>
     </form>
     <div class="row">
@@ -155,38 +155,23 @@ if (isset($_SESSION['username'])) {
             // Display walk day and booked by if it exists
             if ($walkDay) {
                 echo '<p>Walk Day: ' . $walkDay . '</p>';
-                if ($bookedBy) {
-                    echo '<p>Booked by: ' . $bookedBy . '</p>';
-                }
+
             } else {
                 echo '<p>No walk day selected</p>';
             }
 
-            // Existing button for dog walkers
+            // Booking button for dog walkers
             if ($isDogWalker) {
-                if (!$walkDay || $bookedBy == $_SESSION['u_id']) {
+                if (!$walkDay || $bookedBy == $walker_id) {
                     echo '
-<button class="btn btn-primary" id = "openPopUp" onclick="showPopup(\'popup-' . $key . '\')">Select Walk Day</button>';
+<form method="post" action="dogs.php">
+    <input type="hidden" name="dog_id" value="' . $value['d_id'] . '">
+    <button type="submit" name="book_walk" class="btn btn-primary">Book Dog Walk</button>
+</form>';
                 } else {
                     echo '<p>This dog has already been booked by another walker.</p>';
                 }
             }
-
-            // Popup for selecting walk day
-            echo '
-    <div id="popup-' . $key . '" class="popup">
-        <div class="popup-content">
-            <h4>Select Walk Day for ' . $dogName . '</h4>
-            <form method="POST" action="process_walk_day.php">
-                <input type="hidden" name="dog_id" value="' . $value['d_id'] . '">
-                <label for="walk_day">Select Day:</label>
-                <input type="date" id="walk_day" name="walk_day" required>
-                <br><br>
-                <button type="submit" class="btn btn-success">Submit</button>
-                <button id = "closePopUp" type="button" onclick="hidePopup(\'popup-' . $key . '\')" class="btn btn-danger">Cancel</buttonid>
-            </form>
-        </div>
-    </div>';
 
             echo '
         </div>
@@ -194,53 +179,33 @@ if (isset($_SESSION['username'])) {
 </div>';
         }
         ?>
-        <?php
-        if (isset($_SESSION['username'])) {
-            echo '
-        <div class="tit"> 
-            <h3>
-                Add your pet here!
-            </h3>
-            <button class = "butt_border" id="addNew" name="click">Click me</button>
-        </div>
-        <div id="myPopup" class="popup">
-            <div class="popup-content">
-                <h4>Insert information about your pet!</h4>
-                <div style="border: 1px solid; padding: 5px; border-radius: 10px; text-align: center">
-                    <form name="addPet" method="POST" enctype="multipart/form-data" action="upload.php">
-                        <label for="file">Picture: </label><br>
-                        <input placeholder="Photo" type="file" name="d_pic"><br>
-                        <label for="name">Name: </label><br>
-                        <input placeholder="Name" type="text" name="d_name"><br>
-                        <label for="breed">Breed: </label><br>
-                        <input placeholder="Breed" type="text" name="d_breed"><br>
-                        <label for="gender">Gender: </label><br>
-                        <input placeholder="Gender" type="text" name="d_gender"><br>
-                        <label for="age">Age: </label><br>
-                        <input placeholder="Age" type="text" name="d_age"><br>
-                        <label for="desc" style="text-align: center">About your pet: </label><br>
-                        <textarea placeholder="Description" name="d_desc" rows="7"></textarea><br>
-                        <input type="submit" name="submit" value="Submit" onclick="refreshPage()">
-                        <script>
-                            if (window.history.replaceState) {
-                                window.history.replaceState(null, null, window.location.href);
-                            }
-                        </script>
-                    </form>
-                    <button id="closePopup">
-                        Close
-                    </button>
-                </div>
-            </div>
-        </div>
-        <script src="CSS/popupWindow.js"></script>
-        ';
-        }
-        ?>
     </div>
 </div>
 
+<?php
+// Handle form submission to book a dog walk
+if (isset($_POST['book_walk'])) {
+    $dog_id = $_POST['dog_id'];
+
+    try {
+        // Update activity_column for the walker
+        $stmt = $pdo->prepare('UPDATE users SET activity_column = activity_column + 1 WHERE u_id = :walker_id');
+        $stmt->bindParam(':walker_id', $walker_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        // Optionally, you can redirect or display a success message
+        // Example redirect:
+        // header('Location: dogs.php?success=1');
+        // exit();
+    } catch (PDOException $e) {
+        // Handle database errors
+        echo "Error updating activity: " . $e->getMessage();
+    }
+}
+?>
+
 <script>
+    // Function to show popup
     function showPopup(popupId) {
         var popup = document.getElementById(popupId);
         if (popup) {
@@ -248,6 +213,7 @@ if (isset($_SESSION['username'])) {
         }
     }
 
+    // Function to hide popup
     function hidePopup(popupId) {
         var popup = document.getElementById(popupId);
         if (popup) {

@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require_once "db_config.php";
 require_once "functions.php";
 
@@ -8,8 +11,7 @@ if (isset($_GET['token'])) {
 
 if (!empty($token) and strlen($token) === 40) {
 
-    $sql = "UPDATE users SET active = 1, registration_token = '', registration_expires = ''
-            WHERE binary registration_token = :token AND registration_expires>now()";
+    $sql = "UPDATE users SET active = 1, registration_expires = NOW() WHERE registration_token = :token";
 
     $stmt = $pdo->prepare($sql);
 

@@ -23,7 +23,13 @@ require 'functions.php';
 try {
     $sql_str = "";
 
-    $stmt = $pdo->prepare('SELECT u_fname, u_lname FROM users WHERE walk_switch = 1 AND u_rating >= 4 ORDER BY u_rating DESC LIMIT 5');
+    $stmt = $pdo->prepare('SELECT users.u_id, users.u_fname, users.u_lname, AVG(ratings.rating) AS avg_rating, COUNT(ratings.id) AS num_ratings 
+                           FROM users 
+                           LEFT JOIN ratings ON users.u_id = ratings.walker_id
+                           WHERE users.walk_switch = 1
+                           GROUP BY users.u_id, users.u_fname, users.u_lname
+                           ORDER BY avg_rating DESC
+                           LIMIT 5');
     $stmt->execute();
     $highestRatedWalkers = $stmt->fetchAll();
 
@@ -126,6 +132,8 @@ try {
     <br><br><br>
     <p class="pr">Our 5 Top Rated Dog Walkers</p>
     <div class="row">
+	<div class = "col-1">
+        </div>
         <?php
         if (!empty($highestRatedWalkers)) {
             foreach ($highestRatedWalkers as $walker) {
@@ -146,7 +154,6 @@ try {
         <div class = "col-1">
         </div>
     </div>
-    <a href="Admins/adminUsers.php">To admin</a>
 </div>
 </body>
 </html>

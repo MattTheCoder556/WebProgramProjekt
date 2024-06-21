@@ -85,8 +85,17 @@ function existsUser(PDO $pdo, string $email): bool {
 function registerUser   (PDO $pdo, string $password, string $firstname, string $lastname, string $email, string $address, string $token, string $phoneNum, bool $wSwitch): int {
     $passwordHashed = password_hash($password, PASSWORD_DEFAULT);
 
-    $sql = "INSERT INTO users (u_fname, u_lname, u_email, u_pass, u_phone, u_address, walk_switch, registration_token, registration_expires, active)
-            VALUES (:firstname, :lastname, :email, :passwordHashed, :phone, :address, :switch, :token, DATE_ADD(now(), INTERVAL 1 DAY), 0)";
+    $forgotten_password_token = '';
+    $forgotten_password_expires = date('Y-m-d H:i:s', strtotime('+1 day'));
+        $is_banned = 0;
+        $u_rating = 0;
+        $activity_column = 0;
+
+
+
+
+    $sql = "INSERT INTO users (u_fname, u_lname, u_email, u_pass, u_phone, u_address, walk_switch, registration_token, registration_expires, active, forgotten_password_token, forgotten_password_expires, is_banned, u_rating, activity_column)
+            VALUES (:firstname, :lastname, :email, :passwordHashed, :phone, :address, :switch, :token, DATE_ADD(now(), INTERVAL 1 DAY), 0, :forgotten_password_token, :forgotten_password_expires, :is_banned, :u_rating, :activity_column)";
     $stmt = $pdo->prepare($sql);
    // $stmt->bindParam(':profPic', $profilePic, PDO::PARAM_STR);
     $stmt->bindParam(':firstname', $firstname, PDO::PARAM_STR);
@@ -95,8 +104,18 @@ function registerUser   (PDO $pdo, string $password, string $firstname, string $
     $stmt->bindParam(':passwordHashed', $passwordHashed, PDO::PARAM_STR);
     $stmt->bindParam(':phone', $phoneNum, PDO::PARAM_STR);
     $stmt->bindParam(':address', $address, PDO::PARAM_STR);
-    $stmt->bindValue(':switch', $wSwitch, PDO::PARAM_INT); // PDO::PARAM_BOOL could be problematic in some databases
+    $stmt->bindValue(':switch', $wSwitch, PDO::PARAM_INT);
     $stmt->bindParam(':token', $token, PDO::PARAM_STR);
+    $stmt->bindParam(':forgotten_password_token', $forgotten_password_token, PDO::PARAM_STR);
+        $stmt->bindParam(':forgotten_password_expires', $forgotten_password_expires, PDO::PARAM_STR);
+        $stmt->bindParam(':is_banned', $is_banned, PDO::PARAM_INT);
+        $stmt->bindParam(':u_rating', $u_rating, PDO::PARAM_INT);
+        $stmt->bindParam(':activity_column', $activity_column, PDO::PARAM_INT); 
+
+
+
+
+
 
     $stmt->execute();
 

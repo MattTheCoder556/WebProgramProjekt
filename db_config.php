@@ -1,9 +1,9 @@
 <?php
 
 $servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "dogwalkxampp";
+$username = "duke";
+$password = "c826FtxhnVDUmK3";
+$dbname = "duke";
 
 
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -22,7 +22,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-const SITE = 'http://localhost/NegyedikSzemeszter/DogWalk/';
+const SITE = 'https://duke.stud.vts.su.ac.rs/DogWalking/';
 
 $actions = ['login', 'register', 'forget'];
 

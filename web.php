@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 session_start();
 require  "db_config.php";
 require "functions.php";
@@ -58,7 +61,7 @@ if ($action != "" and in_array($action, $actions) and strpos($referer, SITE) !==
 
         case "register":
 
-           //$profPic = trim($_POST['profilePic']);
+            //$profPic = trim($_POST['profilePic']);
             $firstname = trim($_POST['firstname']);
             $lastname = trim($_POST['lastname']);
             $email = trim($_POST['email']);
@@ -229,4 +232,6 @@ if ($action != "" and in_array($action, $actions) and strpos($referer, SITE) !==
 } else {
     redirection('index.php?l=0');
 }
+?>
 
+	

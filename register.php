@@ -51,6 +51,7 @@
             <label for="dogw1" class="form-check-label">I would like to be a Dog walker!</label>
         </div>
         <div class="mb-3 d-grid gap-2">
+            <input type="hidden" name="action" value="register">
             <button type="submit" name="Submit" class="btn btn-primary">Register</button>
         </div>
         <?php

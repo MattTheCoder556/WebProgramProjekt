@@ -36,6 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bindParam(':rating', $rating, PDO::PARAM_INT);
             $stmt->execute();
             echo "Thank you for your rating!";
+header("Location: walkers.php");
+    exit();
         }
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();

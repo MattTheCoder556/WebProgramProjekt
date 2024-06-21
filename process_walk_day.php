@@ -9,17 +9,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $walkDay = $_POST['walk_day'];
     $walkerId = $_SESSION['u_id'];
 
-    // Check if the dog is already booked
-    $sqlCheckBooking = "SELECT booked_by FROM dogs WHERE d_id = :dog_id";
+    // Check if the dog is already booked for the given walk day
+    $sqlCheckBooking = "SELECT walk_day FROM dogs WHERE d_id = :dog_id";
     $stmtCheckBooking = $pdo->prepare($sqlCheckBooking);
     $stmtCheckBooking->bindParam(':dog_id', $dogId, PDO::PARAM_INT);
     $stmtCheckBooking->execute();
-    $currentBooking = $stmtCheckBooking->fetch(PDO::FETCH_ASSOC);
+    $currentWalkDay = $stmtCheckBooking->fetchColumn();
 
-    if ($currentBooking && $currentBooking['booked_by'] !== null) {
-        // Dog is already booked
-        echo "This dog has already been booked by another walker.";
-        exit();
+    // Debugging output
+    echo "<pre>";
+    echo "Current Walk Day: " . htmlspecialchars($currentWalkDay) . "\n";
+    echo "</pre>";
+
+    // Check if the walk day has passed
+    $currentDate = date('Y-m-d');
+    if ($currentWalkDay !== null && $currentWalkDay < $currentDate) {
+        // Allow booking because the walk day has passed
+        $walkerId = null; // Set walker_id to null to allow any walker to book
     }
 
     // Update the database with the new walk_day and walker
