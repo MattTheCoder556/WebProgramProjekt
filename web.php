@@ -15,12 +15,10 @@ $phoneNum = "";
 $address = "";
 $wSwitch = "";
 $action = "";
-//$profPic = "";
 
 $referer = $_SERVER['HTTP_REFERER'];
 
-//var_dump($referer);
-//exit();
+
 
 $action = $_POST["action"];
 

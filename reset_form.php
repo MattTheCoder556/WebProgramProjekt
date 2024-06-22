@@ -1,5 +1,5 @@
 <?php
-require_once 'db_config.php'; // Adjust this based on your project structure and database configuration
+require_once 'db_config.php';
 
 if (isset($_GET['token'])) {
     $token = trim($_GET['token']);

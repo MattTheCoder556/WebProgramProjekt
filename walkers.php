@@ -16,9 +16,19 @@
 require("db_config.php");
 session_start();
 
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+
 try {
     $sql = "SELECT u_id, u_pic, u_fname, u_lname, u_phone, u_email FROM users WHERE walk_switch != 0";
-    $stmt = $pdo->query($sql);
+    if (!empty($search)) {
+        $sql .= " AND (u_fname LIKE :search OR u_lname LIKE :search OR u_email LIKE :search OR u_phone LIKE :search)";
+    }
+    $stmt = $pdo->prepare($sql);
+    if (!empty($search)) {
+        $searchParam = '%' . $search . '%';
+        $stmt->bindParam(':search', $searchParam, PDO::PARAM_STR);
+    }
+    $stmt->execute();
     $walkers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch(PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
@@ -73,37 +83,32 @@ try {
         </div>
     </div>
 </nav>
-<div class="cards">
+<div class="cards mt-4">
+    <form class="product-search mb-4" method="get" action="walkers.php">
+        <input class="form-control" placeholder="Search users" name="search" type="text" value="<?php echo htmlspecialchars($search); ?>">
+        <button class="btn btn-primary mt-2" type="submit">Go</button>
+    </form>
     <div class="row">
         <?php
         if (!empty($walkers)) {
             foreach ($walkers as $walker) {
-                // Debugging output to check the file paths
                 $profilePicPath = 'ProfPic/' . $walker['u_pic'];
-//                if (!file_exists($profilePicPath)) {
-//                    echo '<p style="color: red;">Profile picture not found: ' . htmlspecialchars($profilePicPath) . '</p>';
-//                } else {
-//                    echo '<p style="color: green;">Profile picture found: ' . htmlspecialchars($profilePicPath) . '</p>';
-//                }
 
                 echo '
         <div class="col-lg-3 col-sm-6">
-                    <div class="card">
+                    <div class="card mb-4">
                         <img src="'.$profilePicPath.'" class="card-img-top" alt="Profile Picture">
                         <div class="card-body">
                             <h5 class="card-title">'.$walker['u_fname'].' '.$walker['u_lname'].'</h5>
                             <p class="card-text">'.$walker['u_phone'].'<br>'.$walker['u_email'].'</p>';
 
-                // Check if the user is logged in
                 if(isset($_SESSION['username'])) {
-                    $userId = $_SESSION['u_id']; // User ID from session
+                    $userId = $_SESSION['u_id'];
                     $walkerId = $walker['u_id'];
 
-                    // Check if the logged-in user is the same as the walker being displayed
                     if ($userId == $walkerId) {
                         echo '<p>You cannot rate yourself.</p>';
                     } else {
-                        // Check if the user has already rated this walker
                         $checkRatingSql = "SELECT * FROM ratings WHERE user_id = :user_id AND walker_id = :walker_id";
                         $stmt = $pdo->prepare($checkRatingSql);
                         $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
@@ -118,14 +123,14 @@ try {
                         <form method="post" action="rate_walker.php">
                             <input type="hidden" name="walker_id" value="'.$walkerId.'">
                             <label for="rating">Rate this walker:</label>
-                            <select name="rating" id="rating">
+                            <select name="rating" id="rating" class="form-select">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
                                 <option value="4">4</option>
                                 <option value="5">5</option>
                             </select>
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-primary mt-2">Submit</button>
                         </form>';
                         }
                     }
@@ -137,7 +142,7 @@ try {
         </div>';
             }
         } else {
-            echo '<p class="dogerror"> Something went wrong! </p>';
+            echo '<p class="dogerror">No walkers found!</p>';
         }
         ?>
     </div>

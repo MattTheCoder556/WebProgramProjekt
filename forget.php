@@ -4,7 +4,6 @@ ini_set('display_errors', 1);
 
 require_once "db_config.php";
 require_once "functions.php";
-// https://www.php.net/manual/en/reserved.variables.request
 
 if (isset($_GET['token'])) {
     $token = trim($_GET['token']);

@@ -39,54 +39,53 @@
             <?php
             session_start();
 
-            if(!isset($_SESSION['username'])){
+            if (!isset($_SESSION['username'])) {
                 echo '
                 <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="login.php">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="register.php">Register</a>
-                </li>
-            </ul>
-                ';
-            }
-            else{
-                echo'
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.php">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="register.php">Register</a>
+                    </li>
+                </ul>';
+            } else {
+                echo '
                 <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="user.php"><i class="bi bi-person-fill"></i>&nbsp;Profile</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="user.php"><i class="bi bi-person-fill"></i>&nbsp;Profile</a>
+                    </li>
                 </ul>';
             }
             ?>
-
         </div>
     </div>
 </nav>
-<div class = "cards">
-<div class="container mt-4">
-    <div class = "square">
-    <div class="d-flex flex-column align-items-center">
-        <div class="img mb-3">
-            <?php
-            if (isset($_SESSION['profPic'])) {
-                $profPic = $_SESSION['profPic'];
-                echo '<img src="' . $profPic . '" class="profile-pic">';
-            }
-            ?>
+
+<div class="cards">
+    <div class="container mt-4">
+        <div class="square">
+            <div class="d-flex flex-column align-items-center">
+                <div class="img mb-3">
+                    <?php
+                    if (isset($_SESSION['profPic'])) {
+                        $profPic = $_SESSION['profPic'];
+                        echo '<img src="' . $profPic . '" class="profile-pic">';
+                    }
+                    ?>
+                </div>
+                <div class="text-center lighterSQ">
+                    <p>Name: <br><?php echo isset($_SESSION['firstname']) ? $_SESSION['firstname'] : ''; echo ' '; echo isset($_SESSION['lastname']) ? $_SESSION['lastname'] : ''; ?></p>
+                    <p>E-Mail: <br><?php echo isset($_SESSION['email']) ? $_SESSION['email'] : ''; ?></p>
+                    <p>Phone Number: <br><?php echo isset($_SESSION['phone']) ? $_SESSION['phone'] : ''; ?></p>
+                    <p>Address: <br><?php echo isset($_SESSION['address']) ? $_SESSION['address'] : ''; ?></p>
+                    <p>Click <a href="updateUser.php">here</a> to update your Profile!</p>
+                    <p>Click <a href="logout.php">here</a> to Logout!</p>
+                </div>
+            </div>
         </div>
-        <div class="text-center lighterSQ">
-            <p>Name: <br><?php echo isset($_SESSION['firstname']) ? $_SESSION['firstname'] : ''; echo ' '; echo isset($_SESSION['lastname']) ? $_SESSION['lastname'] : ''; ?></p>
-            <p>E-Mail: <br><?php echo isset($_SESSION['email']) ? $_SESSION['email'] : ''; ?></p>
-            <p>Phone Number: <br><?php echo isset($_SESSION['phone']) ? $_SESSION['phone'] : ''; ?></p>
-            <p>Address: <br><?php echo isset($_SESSION['address']) ? $_SESSION['address'] : ''; ?></p>
-            <p>Click <a href="updateUser.php">here</a> to update your Profile!</p>
-            <p>Click <a href="logout.php">here</a> to Logout!</p>
-        </div>
+       
     </div>
-    </div>
-</div>
 </div>
 </body>
 </html>

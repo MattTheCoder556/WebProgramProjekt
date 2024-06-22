@@ -12,7 +12,7 @@
         <div class="col-md-6">
             <div class="alert alert-info">
                 <?php
-                include_once 'db_config.php'; // Adjust this based on your project structure and database configuration
+                include_once 'db_config.php';
                 $rf = 0;
 
                 if (isset($_GET["rf"]) and is_numeric($_GET['rf'])) {

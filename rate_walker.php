@@ -8,11 +8,10 @@ if (!isset($_SESSION['username'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $userId = $_SESSION['u_id']; // User ID from session
+    $userId = $_SESSION['u_id'];
     $walkerId = $_POST['walker_id'];
     $rating = $_POST['rating'];
 
-    // Prevent a user from rating themselves
     if ($userId == $walkerId) {
         echo "You cannot rate yourself.";
         exit();

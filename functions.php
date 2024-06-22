@@ -1,6 +1,5 @@
 <?php
 ob_start();
-// Ensure these are at the top of your file
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
@@ -184,31 +183,28 @@ function sendEmail(PDO $pdo, string $email, array $emailData, string $body, int 
         $mail = new PHPMailer(true);
 
         try {
-            //Server settings
-            $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-            $mail->isSMTP();                                            //Send using SMTP
-            $mail->Host = 'mail.duke.stud.vts.su.ac.rs';                     //Set the SMTP server to send through
-            $mail->SMTPAuth = true;                                   //Enable SMTP authentication
-            $mail->Username = 'duke';                     //SMTP username
-            $mail->Password = 'c826FtxhnVDUmK3';                               //SMTP password
+            $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+            $mail->isSMTP();
+            $mail->Host = 'mail.duke.stud.vts.su.ac.rs';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'duke';
+            $mail->Password = 'c826FtxhnVDUmK3';
             $mail->SMTPSecure = 'tls';
-            $mail->Port = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+            $mail->Port = 587;
 
 
             //Recipients
             $mail->setFrom('duke@duke.stud.vts.su.ac.rs', 'The Duke');
-            $mail->addAddress($email, 'User');     //Add a recipient
-            //$mail->addAddress('ellen@example.com');               //Name is optional
+            $mail->addAddress($email, 'User');
+            //$mail->addAddress('ellen@example.com');
             //$mail->addReplyTo('info@example.com', 'Information');
             $mail->addCC('cc@example.com');
             $mail->addBCC('bcc@example.com');
 
-            //Content
 
             $mail->isHTML(true);
             $mail->Subject = "Register";
             $mail->Body = $body;
-            //$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
             $mail->send();
             echo 'Message has been sent';
