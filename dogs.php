@@ -24,9 +24,11 @@ if (isset($_SESSION['username'])) {
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 
 try {
-    $sql = "SELECT d_id, d_pic, d_name, d_breed, d_gender, d_age, d_desc, walk_day, booked_by FROM dogs";
+    $sql = "SELECT d.d_id, d.d_pic, d.d_name, d.d_breed, d.d_gender, d.d_age, d.d_desc, d.walk_day, u.u_email AS booked_by_email
+            FROM dogs d
+            LEFT JOIN users u ON d.booked_by = u.u_id";
     if (!empty($search)) {
-        $sql .= " WHERE d_name LIKE :search OR d_breed LIKE :search OR d_gender LIKE :search OR d_age LIKE :search OR d_desc LIKE :search";
+        $sql .= " WHERE d.d_name LIKE :search OR d.d_breed LIKE :search OR d.d_gender LIKE :search OR d.d_age LIKE :search OR d.d_desc LIKE :search";
     }
     $stmt = $pdo->prepare($sql);
     if (!empty($search)) {
@@ -162,7 +164,7 @@ foreach ($dogs as $key => $value) {
             $dogAge = $value['d_age'];
             $dogDesc = $value['d_desc'];
             $walkDay = $value['walk_day'];
-            $bookedBy = $value['booked_by'];
+            $bookedByEmail = $value['booked_by_email'];
 
             echo '
 <div class="col-lg-3 col-sm-6">
@@ -174,15 +176,15 @@ foreach ($dogs as $key => $value) {
 
             if ($walkDay) {
                 echo '<p>Walk Day: ' . $walkDay . '</p>';
-                if ($bookedBy) {
-                    echo '<p>Booked by: ' . $bookedBy . '</p>';
+                if ($bookedByEmail) {
+                    echo '<p>Booked by: ' . $bookedByEmail . '</p>';
                 }
             } else {
                 echo '<p>No walk day selected</p>';
             }
 
             if ($isDogWalker) {
-                if (!$bookedBy) {
+                if (!$bookedByEmail) {
                     echo '<button class="btn btn-primary" onclick="showPopup(\'popup-' . $key . '\')">Select Walk Day</button>';
                 } else {
                     echo '<p>This dog has already been booked by another walker.</p>';
@@ -261,8 +263,6 @@ if (isset($_POST['book_walk'])) {
         $stmt = $pdo->prepare('UPDATE users SET activity_column = activity_column + 1 WHERE u_id = :walker_id');
         $stmt->bindParam(':walker_id', $walker_id, PDO::PARAM_INT);
         $stmt->execute();
-
-
     } catch (PDOException $e) {
         echo "Error updating activity: " . $e->getMessage();
     }
